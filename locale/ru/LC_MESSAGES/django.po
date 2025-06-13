@@ -1,0 +1,72 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-13 14:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14) ? 2 : 3);\n"
+
+msgid "Task Manager"
+msgstr "Менеджер задач"
+
+msgid "Welcome"
+msgstr "Добро пожаловать"
+
+msgid "Home"
+msgstr "Главная"
+
+msgid "Users"
+msgstr "Пользователи"
+
+msgid "Login"
+msgstr "Вход"
+
+msgid "Sign up"
+msgstr "Регистрация"
+
+msgid "Hello from Hexlet!"
+msgstr "Привет от Хекслета!"
+
+msgid "Practical programming courses"
+msgstr "Практические курсы по программированию"
+
+msgid "Learn more"
+msgstr "Узнать больше"
+
+msgid "User Management"
+msgstr "Управление пользователями"
+
+msgid "Manage users, roles and permissions in your task management system."
+msgstr "Управляйте пользователями, ролями и разрешениями в вашей системе управления задачами."
+
+msgid "Task Management"
+msgstr "Управление задачами"
+
+msgid "Create, assign and track tasks with ease. Stay organized and productive."
+msgstr "Создавайте, назначайте и отслеживайте задачи с легкостью. Оставайтесь организованными и продуктивными."
+
+msgid "Labels & Statuses"
+msgstr "Метки и статусы"
+
+msgid "Organize tasks with custom labels and track progress with statuses."
+msgstr "Организуйте задачи с помощью пользовательских меток и отслеживайте прогресс со статусами."
+
+msgid "Ready to get started?"
+msgstr "Готовы начать?"
+
+msgid "Join our community and start managing your tasks efficiently."
+msgstr "Присоединяйтесь к нашему сообществу и начните эффективно управлять своими задачами."
+
+msgid "Created by"
+msgstr "Создано"

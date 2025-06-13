@@ -1,0 +1,38 @@
+[project]
+name = "hexlet-code"
+version = "0.1.0"
+description = "Task Manager Django Application"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=5.2.3",
+    "gunicorn>=23.0.0",
+    "python-dotenv>=1.1.0",
+    "dj-database-url>=3.0.0",
+    "psycopg2-binary>=2.9.10",
+    "whitenoise>=6.9.0",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "flake8>=6.0",
+    "isort>=5.0",
+    "black>=23.0",
+]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]
+exclude = [
+    "migrations",
+    "settings.py",
+    "__pycache__",
+    ".git",
+    ".venv",
+    "venv",
+]
