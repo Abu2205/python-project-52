@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -9,8 +9,8 @@ from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.db.models import ProtectedError
 
-from .forms import UserRegistrationForm, UserUpdateForm, StatusForm
-from .models import Status
+from .forms import UserRegistrationForm, UserUpdateForm, StatusForm, TaskForm
+from .models import Status, Task
 
 
 class IndexView(TemplateView):
@@ -69,9 +69,17 @@ class UserDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         """Проверяем, что у пользователя нет связанных задач перед удалением"""
         user = self.get_object()
-        # TODO: Добавить проверку на связанные задачи когда будет модель Task
-        messages.success(request, self.success_message)
-        return super().post(request, *args, **kwargs)
+        try:
+            # Проверяем, есть ли задачи, связанные с пользователем
+            if user.authored_tasks.exists() or user.assigned_tasks.exists():
+                messages.error(request, _('Cannot delete user that is in use'))
+                return redirect('users_index')
+            
+            messages.success(request, self.success_message)
+            return super().post(request, *args, **kwargs)
+        except ProtectedError:
+            messages.error(request, _('Cannot delete user that is in use'))
+            return redirect('users_index')
 
 
 class UserLoginView(SuccessMessageMixin, LoginView):
@@ -131,13 +139,76 @@ class StatusDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         """Проверяем, что статус не связан с задачами перед удалением"""
         status = self.get_object()
         try:
-            # TODO: Добавить проверку на связанные задачи когда будет модель Task
-            # if status.tasks.exists():
-            #     messages.error(request, _('Cannot delete status that is in use'))
-            #     return redirect('statuses_index')
+            # Проверяем, есть ли задачи с этим статусом
+            if status.task_set.exists():
+                messages.error(request, _('Cannot delete status that is in use'))
+                return redirect('statuses_index')
             
             messages.success(request, self.success_message)
             return super().post(request, *args, **kwargs)
         except ProtectedError:
             messages.error(request, _('Cannot delete status that is in use'))
             return redirect('statuses_index')
+
+
+# ========== TASK VIEWS ==========
+
+class TaskListView(LoginRequiredMixin, ListView):
+    """Список всех задач"""
+    model = Task
+    template_name = 'tasks/index.html'
+    context_object_name = 'tasks'
+
+
+class TaskDetailView(LoginRequiredMixin, DetailView):
+    """Просмотр задачи"""
+    model = Task
+    template_name = 'tasks/detail.html'
+    context_object_name = 'task'
+
+
+class TaskCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    """Создание новой задачи"""
+    model = Task
+    form_class = TaskForm
+    template_name = 'tasks/create.html'
+    success_url = reverse_lazy('tasks_index')
+    success_message = _('Task successfully created')
+
+    def form_valid(self, form):
+        """Устанавливаем автора задачи"""
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class TaskUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    """Редактирование задачи"""
+    model = Task
+    form_class = TaskForm
+    template_name = 'tasks/update.html'
+    success_url = reverse_lazy('tasks_index')
+    success_message = _('Task successfully updated')
+
+
+class TaskDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    """Удаление задачи"""
+    model = Task
+    template_name = 'tasks/delete.html'
+    success_url = reverse_lazy('tasks_index')
+    success_message = _('Task successfully deleted')
+
+    def get(self, request, *args, **kwargs):
+        """Проверяем права доступа при GET запросе"""
+        task = self.get_object()
+        if request.user != task.author:
+            messages.error(request, _('Only task author can delete it'))
+            return redirect('tasks_index')
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """Проверяем права доступа при POST запросе"""
+        task = self.get_object()
+        if request.user != task.author:
+            messages.error(request, _('Only task author can delete it'))
+            return redirect('tasks_index')
+        return super().post(request, *args, **kwargs)

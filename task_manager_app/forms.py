@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
-from .models import Status
+from .models import Status, Task
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -73,3 +73,29 @@ class StatusForm(forms.ModelForm):
         labels = {
             'name': _('Name'),
         }
+
+
+class TaskForm(forms.ModelForm):
+    """Форма для задачи"""
+    
+    class Meta:
+        model = Task
+        fields = ('name', 'description', 'status', 'executor')
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+            'executor': forms.Select(attrs={'class': 'form-select'}),
+        }
+        labels = {
+            'name': _('Name'),
+            'description': _('Description'),
+            'status': _('Status'),
+            'executor': _('Executor'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Добавляем пустой вариант для исполнителя
+        self.fields['executor'].empty_label = _('Select executor')
+        self.fields['executor'].required = False

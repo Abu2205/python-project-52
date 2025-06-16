@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3>{% trans "Delete task" %}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <strong>{% trans "Warning!" %}</strong>
+                        {% trans "Are you sure you want to delete task" %} <strong>{{ object.name }}</strong>?
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h5>{% trans "Task details" %}:</h5>
+                        <ul class="list-unstyled">
+                            <li><strong>{% trans "Status" %}:</strong> {{ object.status.name }}</li>
+                            <li><strong>{% trans "Author" %}:</strong> {{ object.author.get_full_name|default:object.author.username }}</li>
+                            <li><strong>{% trans "Executor" %}:</strong> 
+                                {% if object.executor %}
+                                    {{ object.executor.get_full_name|default:object.executor.username }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </li>
+                            <li><strong>{% trans "Date created" %}:</strong> {{ object.created_at|date:"d.m.Y H:i" }}</li>
+                        </ul>
+                    </div>
+                    
+                    <p>{% trans "This action cannot be undone." %}</p>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">{% trans "Yes, delete" %}</button>
+                        <a href="{% url 'tasks_index' %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

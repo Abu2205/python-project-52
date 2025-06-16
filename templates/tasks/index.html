@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{% trans "Tasks" %}</h1>
+        <a href="{% url 'task_create' %}" class="btn btn-primary">
+            {% trans "Create task" %}
+        </a>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>{% trans "ID" %}</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Author" %}</th>
+                    <th>{% trans "Executor" %}</th>
+                    <th>{% trans "Date created" %}</th>
+                    <th>{% trans "Actions" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.id }}</td>
+                    <td>
+                        <a href="{% url 'task_detail' task.pk %}" class="text-decoration-none">
+                            {{ task.name }}
+                        </a>
+                    </td>
+                    <td>{{ task.status.name }}</td>
+                    <td>{{ task.author.get_full_name|default:task.author.username }}</td>
+                    <td>
+                        {% if task.executor %}
+                            {{ task.executor.get_full_name|default:task.executor.username }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td>{{ task.created_at|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        <a href="{% url 'task_update' task.pk %}" class="btn btn-sm btn-outline-primary">
+                            {% trans "Edit" %}
+                        </a>
+                        {% if user == task.author %}
+                            <a href="{% url 'task_delete' task.pk %}" class="btn btn-sm btn-outline-danger">
+                                {% trans "Delete" %}
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted">
+                        {% trans "No tasks found" %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

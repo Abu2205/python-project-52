@@ -30,7 +30,7 @@ createsuperuser:
 
 # Загрузка тестовых данных
 loaddata:
-	uv run python manage.py loaddata users.json statuses.json
+	uv run python manage.py loaddata users.json statuses.json tasks.json
 
 # Создание миграций
 makemigrations:

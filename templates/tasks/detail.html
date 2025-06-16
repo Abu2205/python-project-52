@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">{{ task.name }}</h3>
+                    <div>
+                        <a href="{% url 'task_update' task.pk %}" class="btn btn-outline-primary btn-sm">
+                            {% trans "Edit" %}
+                        </a>
+                        {% if user == task.author %}
+                            <a href="{% url 'task_delete' task.pk %}" class="btn btn-outline-danger btn-sm">
+                                {% trans "Delete" %}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>{% trans "Status" %}:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="badge bg-info">{{ task.status.name }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>{% trans "Author" %}:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            {{ task.author.get_full_name|default:task.author.username }}
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>{% trans "Executor" %}:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            {% if task.executor %}
+                                {{ task.executor.get_full_name|default:task.executor.username }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>{% trans "Date created" %}:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            {{ task.created_at|date:"d.m.Y H:i" }}
+                        </div>
+                    </div>
+                    
+                    {% if task.description %}
+                        <div class="row">
+                            <div class="col-md-4">
+                                <strong>{% trans "Description" %}:</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="border rounded p-3 bg-light">
+                                    {{ task.description|linebreaks }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'tasks_index' %}" class="btn btn-secondary">
+                        {% trans "Back to tasks" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
