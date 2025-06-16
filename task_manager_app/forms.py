@@ -1,0 +1,75 @@
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
+
+from .models import Status
+
+
+class UserRegistrationForm(UserCreationForm):
+    """Форма регистрации пользователя"""
+    first_name = forms.CharField(
+        max_length=30,
+        required=True,
+        label=_('First name'),
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    last_name = forms.CharField(
+        max_length=30,
+        required=True,
+        label=_('Last name'),
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'username', 'password1', 'password2')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password1'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password2'].widget.attrs.update({'class': 'form-control'})
+        
+        # Обновляем labels и help_text для соответствия требованиям
+        self.fields['username'].label = _('Username')
+        self.fields['password1'].label = _('Password')
+        self.fields['password2'].label = _('Password confirmation')
+        self.fields['password1'].help_text = _(
+            'Your password must contain at least 3 characters.'
+        )
+        self.fields['password2'].help_text = _(
+            'Enter the same password as before, for verification.'
+        )
+
+
+class UserUpdateForm(forms.ModelForm):
+    """Форма обновления пользователя"""
+    
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'username')
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'first_name': _('First name'),
+            'last_name': _('Last name'),
+            'username': _('Username'),
+        }
+
+
+class StatusForm(forms.ModelForm):
+    """Форма для статуса"""
+    
+    class Meta:
+        model = Status
+        fields = ('name',)
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'name': _('Name'),
+        }

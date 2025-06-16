@@ -78,8 +78,13 @@
                     {% trans "Join our community and start managing your tasks efficiently." %}
                 </p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                    <a href="#" class="btn btn-primary me-md-2">{% trans "Sign up" %}</a>
-                    <a href="#" class="btn btn-outline-secondary">{% trans "Login" %}</a>
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'user_create' %}" class="btn btn-primary me-md-2">{% trans "Sign up" %}</a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-secondary">{% trans "Login" %}</a>
+                    {% else %}
+                        <a href="{% url 'users_index' %}" class="btn btn-primary me-md-2">{% trans "Users" %}</a>
+                        <a href="{% url 'user_update' user.pk %}" class="btn btn-outline-secondary">{% trans "Edit profile" %}</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

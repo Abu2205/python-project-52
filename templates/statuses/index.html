@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{% trans "Statuses" %}</h1>
+        <a href="{% url 'status_create' %}" class="btn btn-primary">
+            {% trans "Create status" %}
+        </a>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>{% trans "ID" %}</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Date created" %}</th>
+                    <th>{% trans "Actions" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for status in statuses %}
+                <tr>
+                    <td>{{ status.id }}</td>
+                    <td>{{ status.name }}</td>
+                    <td>{{ status.created_at|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        <a href="{% url 'status_update' status.pk %}" class="btn btn-sm btn-outline-primary">
+                            {% trans "Edit" %}
+                        </a>
+                        <a href="{% url 'status_delete' status.pk %}" class="btn btn-sm btn-outline-danger">
+                            {% trans "Delete" %}
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted">
+                        {% trans "No statuses found" %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

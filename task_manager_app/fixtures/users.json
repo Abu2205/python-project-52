@@ -1,0 +1,38 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$testpassword$hash",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "testuser1",
+      "first_name": "Test",
+      "last_name": "User One",
+      "email": "test1@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-01T10:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$testpassword$hash",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "testuser2",
+      "first_name": "Test",
+      "last_name": "User Two",
+      "email": "test2@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-02T10:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]

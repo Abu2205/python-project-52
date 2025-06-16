@@ -1,6 +1,3 @@
-### Hexlet tests and linter status:
-[![Actions Status](https://github.com/Abu2205/python-project-52/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Abu2205/python-project-52/actions)
-
 # Hexlet Code - Task Manager
 
 Django приложение для управления задачами, разработанное в рамках курса Hexlet.
@@ -90,8 +87,14 @@ make dev-setup        # Настройка для разработки
 make dev             # Запуск сервера разработки
 make lint            # Проверка кода линтером
 make test            # Запуск тестов
-make collectstatic   # Сбор статических файлов
+make test-coverage   # Запуск тестов с покрытием
+make makemigrations    # Создание миграций
 make migrate         # Применение миграций
+make makemessages    # Создание файлов переводов
+make compilemessages # Компиляция переводов
+make createsuperuser # Создание суперпользователя
+make loaddata        # Загрузка тестовых данных
+make resetdb         # Сброс БД (только для разработки)
 make build           # Сборка для продакшена
 make render-start    # Запуск на Render.com
 ```

@@ -19,6 +19,29 @@ lint:
 test:
 	uv run python manage.py test
 
+# Запуск тестов с покрытием (если установлен coverage)
+test-coverage:
+	uv run coverage run --source='.' manage.py test
+	uv run coverage report
+
+# Создание суперпользователя
+createsuperuser:
+	uv run python manage.py createsuperuser
+
+# Загрузка тестовых данных
+loaddata:
+	uv run python manage.py loaddata users.json statuses.json
+
+# Создание миграций
+makemigrations:
+	uv run python manage.py makemigrations
+
+# Сброс базы данных (только для разработки)
+resetdb:
+	rm -f db.sqlite3
+	make migrate
+	make loaddata
+
 # Сбор статических файлов
 collectstatic:
 	uv run python manage.py collectstatic --noinput
