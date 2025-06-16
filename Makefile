@@ -61,3 +61,10 @@ render-start:
 # Локальный запуск для разработки
 dev:
 	uv run python manage.py runserver
+
+# Добавить в Makefile
+makemessages:
+	uv run python manage.py makemessages -l ru
+
+compilemessages:
+	uv run python manage.py compilemessages

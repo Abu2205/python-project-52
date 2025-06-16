@@ -19,6 +19,7 @@
                     <th>{% trans "Status" %}</th>
                     <th>{% trans "Author" %}</th>
                     <th>{% trans "Executor" %}</th>
+                    <th>{% trans "Labels" %}</th>
                     <th>{% trans "Date created" %}</th>
                     <th>{% trans "Actions" %}</th>
                 </tr>
@@ -41,6 +42,15 @@
                             —
                         {% endif %}
                     </td>
+                    <td>
+                        {% if task.labels.exists %}
+                            {% for label in task.labels.all %}
+                                <span class="badge bg-secondary me-1" style="font-size: 0.75em;">{{ label.name }}</span>
+                            {% endfor %}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
                     <td>{{ task.created_at|date:"d.m.Y H:i" }}</td>
                     <td>
                         <a href="{% url 'task_update' task.pk %}" class="btn btn-sm btn-outline-primary">
@@ -55,7 +65,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="7" class="text-center text-muted">
+                    <td colspan="8" class="text-center text-muted">
                         {% trans "No tasks found" %}
                     </td>
                 </tr>

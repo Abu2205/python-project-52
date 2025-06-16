@@ -53,6 +53,12 @@ class Task(models.Model):
         null=True,
         verbose_name=_('Executor')
     )
+    labels = models.ManyToManyField(
+        'Label',
+        related_name='tasks',
+        blank=True,
+        verbose_name=_('Labels')
+    )
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name=_('Created at')
@@ -62,6 +68,13 @@ class Task(models.Model):
         verbose_name = _('Task')
         verbose_name_plural = _('Tasks')
         ordering = ['-created_at']
+
+    def __str__(self):
+        return self.name
+
+class Label(models.Model):
+    name = models.CharField(max_length=100, unique=True, verbose_name=_("Name"))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
 
     def __str__(self):
         return self.name

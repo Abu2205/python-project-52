@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
-from .models import Status, Task
+from .models import Status, Task, Label
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -77,10 +77,16 @@ class StatusForm(forms.ModelForm):
 
 class TaskForm(forms.ModelForm):
     """Форма для задачи"""
-    
+    labels = forms.ModelMultipleChoiceField(
+        queryset=Label.objects.all(),
+        required=False,
+        widget=forms.SelectMultiple(attrs={'class': 'form-control'}),
+        label=_('Labels')
+    )
+
     class Meta:
         model = Task
-        fields = ('name', 'description', 'status', 'executor')
+        fields = ('name', 'description', 'status', 'executor', 'labels')
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
@@ -92,10 +98,29 @@ class TaskForm(forms.ModelForm):
             'description': _('Description'),
             'status': _('Status'),
             'executor': _('Executor'),
+            'labels': _('Labels'),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['executor'].empty_label = _('Select executor')
+        self.fields['executor'].required = False
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Добавляем пустой вариант для исполнителя
         self.fields['executor'].empty_label = _('Select executor')
         self.fields['executor'].required = False
+
+class LabelForm(forms.ModelForm):
+    """Форма для меток"""
+    
+    class Meta:
+        model = Label
+        fields = ('name',)
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'name': _('Name'),
+        }

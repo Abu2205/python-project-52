@@ -9,8 +9,8 @@ from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.db.models import ProtectedError
 
-from .forms import UserRegistrationForm, UserUpdateForm, StatusForm, TaskForm
-from .models import Status, Task
+from .forms import UserRegistrationForm, UserUpdateForm, StatusForm, TaskForm, LabelForm
+from .models import Status, Task, Label
 
 
 class IndexView(TemplateView):
@@ -212,3 +212,45 @@ class TaskDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
             messages.error(request, _('Only task author can delete it'))
             return redirect('tasks_index')
         return super().post(request, *args, **kwargs)
+    
+
+class LabelListView(LoginRequiredMixin, ListView):
+    model = Label
+    template_name = 'labels/index.html'
+    context_object_name = 'labels'
+
+
+class LabelCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = Label
+    form_class = LabelForm
+    template_name = 'labels/create.html'
+    success_url = reverse_lazy('labels_list')
+    success_message = _('Label created successfully')
+
+
+class LabelUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = Label
+    form_class = LabelForm
+    template_name = 'labels/update.html'
+    success_url = reverse_lazy('labels_list')
+    success_message = _('Label updated successfully')
+
+
+class LabelDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    model = Label
+    template_name = 'labels/delete.html'
+    success_url = reverse_lazy('labels_list')
+    success_message = _('Label deleted successfully')
+
+    def post(self, request, *args, **kwargs):
+        label = self.get_object()
+        try:
+            if label.task_set.exists():
+                messages.error(request, _('Cannot delete label linked to tasks'))
+                return redirect('labels_list')
+
+            messages.success(request, self.success_message)
+            return super().post(request, *args, **kwargs)
+        except ProtectedError:
+            messages.error(request, _('Cannot delete label linked to tasks'))
+            return redirect('labels_list')

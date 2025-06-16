@@ -39,6 +39,19 @@
                                             </option>
                                         {% endfor %}
                                     </select>
+                                {% elif field.name == 'labels' %}
+                                    <select class="form-select" 
+                                           name="{{ field.name }}" 
+                                           id="{{ field.id_for_label }}"
+                                           multiple>
+                                        {% for choice in field.field.queryset %}
+                                            <option value="{{ choice.pk }}" 
+                                                   {% if choice.pk in field.value %}selected{% endif %}>
+                                                {{ choice.name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="form-text">{% trans "Hold Ctrl/Cmd to select multiple labels" %}</div>
                                 {% else %}
                                     <input type="text" 
                                            class="form-control" 

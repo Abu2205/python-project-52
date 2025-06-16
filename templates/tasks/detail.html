@@ -53,6 +53,21 @@
                     
                     <div class="row mb-3">
                         <div class="col-md-4">
+                            <strong>{% trans "Labels" %}:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            {% if task.labels.exists %}
+                                {% for label in task.labels.all %}
+                                    <span class="badge bg-secondary me-1">{{ label.name }}</span>
+                                {% endfor %}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4">
                             <strong>{% trans "Date created" %}:</strong>
                         </div>
                         <div class="col-md-8">
