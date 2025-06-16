@@ -18,6 +18,16 @@ class IndexView(TemplateView):
     """Главная страница с приветствием"""
     template_name = 'index.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # ВРЕМЕННО: Тест для Rollbar
+        if self.request.GET.get('test_rollbar'):
+            a = None
+            a.hello()  # Создаем ошибку для тестирования
+            
+        return context
+
 
 # ========== USER VIEWS ==========
 
