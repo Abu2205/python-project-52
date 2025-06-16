@@ -10,6 +10,52 @@
         </a>
     </div>
     
+    <!-- Форма фильтрации -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">{% trans "Filter" %}</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label for="{{ filter.form.status.id_for_label }}" class="form-label">
+                        {{ filter.form.status.label }}
+                    </label>
+                    {{ filter.form.status }}
+                </div>
+                
+                <div class="col-md-3">
+                    <label for="{{ filter.form.executor.id_for_label }}" class="form-label">
+                        {{ filter.form.executor.label }}
+                    </label>
+                    {{ filter.form.executor }}
+                </div>
+                
+                <div class="col-md-3">
+                    <label for="{{ filter.form.labels.id_for_label }}" class="form-label">
+                        {{ filter.form.labels.label }}
+                    </label>
+                    {{ filter.form.labels }}
+                </div>
+                
+                <div class="col-md-3 d-flex align-items-end">
+                    <div class="form-check">
+                        {{ filter.form.author_tasks }}
+                        <label class="form-check-label" for="{{ filter.form.author_tasks.id_for_label }}">
+                            {{ filter.form.author_tasks.label }}
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">{% trans "Apply" %}</button>
+                    <a href="{% url 'tasks_index' %}" class="btn btn-secondary">{% trans "Reset" %}</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Таблица задач -->
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -25,7 +71,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for task in tasks %}
+                {% for task in filter.qs %}
                 <tr>
                     <td>{{ task.id }}</td>
                     <td>

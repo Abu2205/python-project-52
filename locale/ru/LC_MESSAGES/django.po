@@ -460,3 +460,18 @@ msgstr "Изменение пользователя"
 
 #~ msgid "No labels found"
 #~ msgstr "Метки не найдены"
+
+msgid "Filter"
+msgstr "Фильтр"
+
+msgid "All"
+msgstr "Все"
+
+msgid "Only my tasks"
+msgstr "Только мои задачи"
+
+msgid "Apply"
+msgstr "Применить"
+
+msgid "Reset"
+msgstr "Сбросить"

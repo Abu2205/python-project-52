@@ -8,7 +8,8 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.db.models import ProtectedError
-
+from django_filters.views import FilterView
+from .filters import TaskFilter
 from .forms import UserRegistrationForm, UserUpdateForm, StatusForm, TaskForm, LabelForm
 from .models import Status, Task, Label
 
@@ -158,6 +159,19 @@ class TaskListView(LoginRequiredMixin, ListView):
     model = Task
     template_name = 'tasks/index.html'
     context_object_name = 'tasks'
+
+class TaskListView(LoginRequiredMixin, FilterView):
+    """Список всех задач с фильтрацией"""
+    model = Task
+    template_name = 'tasks/index.html'
+    context_object_name = 'tasks'
+    filterset_class = TaskFilter
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Передаем фильтр в контекст для отображения формы
+        context['filter'] = self.filterset
+        return context
 
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
