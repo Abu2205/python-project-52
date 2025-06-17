@@ -1,4 +1,4 @@
-.PHONY: install dev-setup lint test collectstatic migrate build render-start
+.PHONY: install dev-setup lint test collectstatic migrate build render-start dev makemessages compilemessages test-coverage createsuperuser loaddata makemigrations resetdb
 
 # Установка зависимостей
 install:
@@ -62,9 +62,10 @@ render-start:
 dev:
 	uv run python manage.py runserver
 
-# Добавить в Makefile
+# Создание переводов
 makemessages:
 	uv run python manage.py makemessages -l ru
 
+# Компиляция переводов
 compilemessages:
 	uv run python manage.py compilemessages
