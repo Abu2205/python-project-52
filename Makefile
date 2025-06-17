@@ -17,7 +17,7 @@ lint:
 
 # Запуск тестов
 test:
-	uv run python manage.py test
+	python -m pytest
 
 # Запуск тестов с покрытием (если установлен coverage)
 test-coverage:
