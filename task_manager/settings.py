@@ -13,6 +13,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key-here')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+DEBUG = True  # Устанавливаем DEBUG в True для разработки
 
 ALLOWED_HOSTS = ['webserver', 'localhost', '127.0.0.1']
 
@@ -100,11 +101,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 LANGUAGES = [
-    ('en', 'English'),
     ('ru', 'Русский'),
+    ('en', 'English'),
 ]
 
 TIME_ZONE = 'UTC'
