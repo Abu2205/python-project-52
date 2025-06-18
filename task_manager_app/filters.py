@@ -22,13 +22,13 @@ class TaskFilter(django_filters.FilterSet):
         widget=forms.Select(attrs={'class': 'form-select mr-3 ml-2'})
     )
     
-    # Изменяем поле label на labels для соответствия переводу
-    labels = django_filters.ModelChoiceFilter(
-        field_name='labels',
+    # Используем имя label вместо labels для соответствия тесту
+    label = django_filters.ModelChoiceFilter(
+        field_name='labels',  # Указываем реальное поле модели
         queryset=Label.objects.all(),
         empty_label="---------",
         widget=forms.Select(attrs={'class': 'form-select mr-3 ml-2'}),
-        label="Метка"  # Явно указываем "Метка" вместо перевода
+        label="Label"
     )
     
     # Изменяем имя поля с author_tasks на self_tasks
@@ -40,7 +40,7 @@ class TaskFilter(django_filters.FilterSet):
 
     class Meta:
         model = Task
-        fields = ['status', 'executor', 'labels', 'self_tasks']
+        fields = ['status', 'executor', 'label', 'self_tasks']
 
     def filter_author_tasks(self, queryset, name, value):
         """Фильтр для отображения только задач текущего пользователя"""
