@@ -17,7 +17,7 @@ lint:
 
 # Запуск тестов Django
 test:
-	uv run python manage.py test
+	uv run python -m pytest task_manager_app/tests.py -v
 
 # Запуск тестов с покрытием
 test-coverage:
