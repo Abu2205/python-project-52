@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from django.db.models import ProtectedError
 from django_filters.views import FilterView
 from .filters import TaskFilter
-from .forms import UserRegistrationForm, UserUpdateForm, StatusForm, TaskForm, LabelForm
+from .forms import UserRegistrationForm, UserUpdateForm, StatusForm, TaskForm, LabelForm, UserLoginForm
 from .models import Status, Task, Label
 
 
