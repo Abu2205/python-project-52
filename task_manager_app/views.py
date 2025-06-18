@@ -174,18 +174,13 @@ class StatusDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
 
 # ========== TASK VIEWS ==========
 
-class TaskListView(LoginRequiredMixin, ListView):
-    """Список всех задач"""
-    model = Task
-    template_name = 'tasks/index.html'
-    context_object_name = 'tasks'
-
 class TaskListView(LoginRequiredMixin, FilterView):
     """Список всех задач с фильтрацией"""
     model = Task
     template_name = 'tasks/index.html'
     context_object_name = 'tasks'
     filterset_class = TaskFilter
+    login_url = '/login/'  # Явно указываем URL для входа
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
