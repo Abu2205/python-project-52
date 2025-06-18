@@ -101,7 +101,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
+# Internationalization - Форсируем русский язык
 LANGUAGE_CODE = 'ru'
 
 LANGUAGES = [
@@ -111,9 +111,20 @@ LANGUAGES = [
 
 TIME_ZONE = 'UTC'
 
+# Принудительно включаем интернационализацию и локализацию
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+# Принудительно устанавливаем русскую локаль
+import locale
+try:
+    locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+except:
+    try:
+        locale.setlocale(locale.LC_ALL, 'Russian_Russia.1251')
+    except:
+        pass
 
 # Путь к файлам локализации
 LOCALE_PATHS = [
