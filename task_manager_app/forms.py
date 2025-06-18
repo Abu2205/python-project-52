@@ -2,9 +2,20 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-
+from django.contrib.auth.forms import AuthenticationForm
 from .models import Status, Task, Label
 
+class UserLoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Имя пользователя'
+        })
+        self.fields['password'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Пароль'
+        })
 
 class UserRegistrationForm(UserCreationForm):
     """Форма регистрации пользователя"""
@@ -103,12 +114,6 @@ class TaskForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['executor'].empty_label = _('Select executor')
-        self.fields['executor'].required = False
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Добавляем пустой вариант для исполнителя
         self.fields['executor'].empty_label = _('Select executor')
         self.fields['executor'].required = False
 

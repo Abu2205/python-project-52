@@ -94,7 +94,7 @@ class UserDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
 
 
 class UserLoginView(SuccessMessageMixin, LoginView):
-    """Вход пользователя"""
+    form_class = UserLoginForm  # Добавить эту строку
     template_name = 'users/login.html'
     success_message = _('You are logged in')
     
