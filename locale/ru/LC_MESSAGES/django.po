@@ -126,7 +126,7 @@ msgstr "У вас нет прав для изменения другого по�
 
 #: task_manager_app/views.py:71
 msgid "User successfully deleted"
-msgstr "Пользователь успешно удалён"
+msgstr "Пользователь успешно удален"
 
 #: task_manager_app/views.py:86 task_manager_app/views.py:92
 msgid "Cannot delete user that is in use"
@@ -146,11 +146,11 @@ msgstr "Статус успешно создан"
 
 #: task_manager_app/views.py:139
 msgid "Status successfully updated"
-msgstr "Статус успешно изменён"
+msgstr "Статус успешно изменен"
 
 #: task_manager_app/views.py:147
 msgid "Status successfully deleted"
-msgstr "Статус успешно удалён"
+msgstr "Статус успешно удален"
 
 #: task_manager_app/views.py:155 task_manager_app/views.py:161
 msgid "Cannot delete status that is in use"
@@ -170,7 +170,7 @@ msgstr "Задача успешно удалена"
 
 #: task_manager_app/views.py:228 task_manager_app/views.py:236
 msgid "Only task author can delete it"
-msgstr "Задачу может удалить только её автор"
+msgstr "Задачу может удалить только ее автор"
 
 #: task_manager_app/views.py:252
 msgid "Label created successfully"
