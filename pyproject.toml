@@ -22,7 +22,7 @@ dev-dependencies = [
     "isort>=5.0",
     "black>=23.0",
     "coverage>=7"
-    "pytest>=7.0",
+    "pytest>=8.4.1",
     "pytest-django>=4.5",
     "pytest-cov>=4.0",
 ]
