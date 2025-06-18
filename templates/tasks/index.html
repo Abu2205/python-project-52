@@ -1,86 +1,123 @@
-<!-- templates/tasks/index.html -->
 {% extends "base.html" %}
 {% load i18n %}
 
 {% block content %}
-<!-- Page Header -->
-<h1 class="my-4">{% trans "Tasks" %}</h1>
-
-<!-- Create Task Button -->
-<a class="btn btn-primary mb-3" href="{% url 'task_create' %}" role="button">{% trans "Create task" %}</a>
-
-<!-- Filter Form -->
-<div class="card mb-3">
-    <div class="card-body bg-light">
-        <form class="form-inline center" method="get">
-            <div class="mb-3">
-                <label class="form-label" for="{{ filter.form.status.id_for_label }}">{{ filter.form.status.label }}</label>
-                {{ filter.form.status }}
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="{{ filter.form.executor.id_for_label }}">{{ filter.form.executor.label }}</label>
-                {{ filter.form.executor }}
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="{{ filter.form.label.id_for_label }}">{{ filter.form.label.label }}</label>
-                {{ filter.form.label }}
-            </div>
-            <div class="mb-3">
-                <div class="form-check">
-                    {{ filter.form.self_tasks }}
-                    <label class="form-check-label" for="{{ filter.form.self_tasks.id_for_label }}">
-                        {{ filter.form.self_tasks.label }}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{% trans "Tasks" %}</h1>
+        <a href="{% url 'task_create' %}" class="btn btn-primary">
+            {% trans "Create task" %}
+        </a>
+    </div>
+    
+    <!-- Форма фильтрации -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">{% trans "Filter" %}</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label for="{{ filter.form.status.id_for_label }}" class="form-label">
+                        {{ filter.form.status.label }}
                     </label>
+                    {{ filter.form.status }}
                 </div>
-            </div>
-            <input class="btn btn-primary" type="submit" value="Показать">
-        </form>
+                
+                <div class="col-md-3">
+                    <label for="{{ filter.form.executor.id_for_label }}" class="form-label">
+                        {{ filter.form.executor.label }}
+                    </label>
+                    {{ filter.form.executor }}
+                </div>
+                
+                <div class="col-md-3">
+                    <label for="{{ filter.form.labels.id_for_label }}" class="form-label">
+                        {{ filter.form.labels.label }}
+                    </label>
+                    {{ filter.form.labels }}
+                </div>
+                
+                <div class="col-md-3 d-flex align-items-end">
+                    <div class="form-check">
+                        {{ filter.form.author_tasks }}
+                        <label class="form-check-label" for="{{ filter.form.author_tasks.id_for_label }}">
+                            {{ filter.form.author_tasks.label }}
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">{% trans "Apply" %}</button>
+                    <a href="{% url 'tasks_index' %}" class="btn btn-secondary">{% trans "Reset" %}</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Таблица задач -->
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>{% trans "ID" %}</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Author" %}</th>
+                    <th>{% trans "Executor" %}</th>
+                    <th>{% trans "Labels" %}</th>
+                    <th>{% trans "Date created" %}</th>
+                    <th>{% trans "Actions" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in filter.qs %}
+                <tr>
+                    <td>{{ task.id }}</td>
+                    <td>
+                        <a href="{% url 'task_detail' task.pk %}" class="text-decoration-none">
+                            {{ task.name }}
+                        </a>
+                    </td>
+                    <td>{{ task.status.name }}</td>
+                    <td>{{ task.author.get_full_name|default:task.author.username }}</td>
+                    <td>
+                        {% if task.executor %}
+                            {{ task.executor.get_full_name|default:task.executor.username }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if task.labels.exists %}
+                            {% for label in task.labels.all %}
+                                <span class="badge bg-secondary me-1" style="font-size: 0.75em;">{{ label.name }}</span>
+                            {% endfor %}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td>{{ task.created_at|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        <a href="{% url 'task_update' task.pk %}" class="btn btn-sm btn-outline-primary">
+                            {% trans "Edit" %}
+                        </a>
+                        {% if user == task.author %}
+                            <a href="{% url 'task_delete' task.pk %}" class="btn btn-sm btn-outline-danger">
+                                {% trans "Delete" %}
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center text-muted">
+                        {% trans "No tasks found" %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
-
-<!-- Tasks Table -->
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>{% trans "ID" %}</th>
-            <th>{% trans "Name" %}</th>
-            <th>{% trans "Status" %}</th>
-            <th>{% trans "Author" %}</th>
-            <th>{% trans "Executor" %}</th>
-            <th>{% trans "Date created" %}</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for task in filter.qs %}
-        <tr>
-            <td>{{ task.id }}</td>
-            <td>
-                <a href="{% url 'task_detail' task.pk %}">{{ task.name }}</a>
-            </td>
-            <td>{{ task.status.name }}</td>
-            <td>{{ task.author.get_full_name|default:task.author.username }}</td>
-            <td>
-                {% if task.executor %}
-                    {{ task.executor.get_full_name|default:task.executor.username }}
-                {% endif %}
-            </td>
-            <td>{{ task.created_at|date:"d.m.Y H:i" }}</td>
-            <td>
-                <a href="{% url 'task_update' task.pk %}">{% trans "Edit" %}</a>
-                <br>
-                {% if user == task.author %}
-                    <a href="{% url 'task_delete' task.pk %}">{% trans "Delete" %}</a>
-                {% endif %}
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="7" class="text-center text-muted">
-                {% trans "No tasks found" %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
 {% endblock %}

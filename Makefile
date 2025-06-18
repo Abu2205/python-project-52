@@ -1,4 +1,4 @@
-.PHONY: install dev-setup lint test collectstatic migrate build render-start dev makemessages compilemessages test-coverage createsuperuser loaddata makemigrations resetdb
+.PHONY: install dev-setup lint test collectstatic migrate build render-start
 
 # Установка зависимостей
 install:
@@ -15,11 +15,11 @@ lint:
 	uv run flake8 .
 	uv run isort --check-diff .
 
-# Запуск тестов Django
+# Запуск тестов
 test:
-	uv run python -m pytest
+	uv run python manage.py test
 
-# Запуск тестов с покрытием
+# Запуск тестов с покрытием (если установлен coverage)
 test-coverage:
 	uv run coverage run --source='.' manage.py test
 	uv run coverage report
@@ -62,10 +62,9 @@ render-start:
 dev:
 	uv run python manage.py runserver
 
-# Создание переводов
+# Добавить в Makefile
 makemessages:
 	uv run python manage.py makemessages -l ru
 
-# Компиляция переводов
 compilemessages:
 	uv run python manage.py compilemessages

@@ -112,8 +112,6 @@ class TaskForm(forms.ModelForm):
         self.fields['executor'].empty_label = _('Select executor')
         self.fields['executor'].required = False
 
-# В файле task_manager_app/forms.py исправьте LabelForm:
-
 class LabelForm(forms.ModelForm):
     """Форма для меток"""
     
@@ -121,13 +119,8 @@ class LabelForm(forms.ModelForm):
         model = Label
         fields = ('name',)
         widgets = {
-            'name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Имя',
-                'maxlength': '100',
-                'required': True
-            }),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
         }
         labels = {
-            'name': _('Name'),  # Это будет переведено как "Имя"
+            'name': _('Name'),
         }

@@ -248,7 +248,7 @@ class LabelCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Label
     form_class = LabelForm
     template_name = 'labels/create.html'
-    success_url = reverse_lazy('labels_index')
+    success_url = reverse_lazy('labels_list')
     success_message = _('Label created successfully')
 
 
@@ -256,25 +256,25 @@ class LabelUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Label
     form_class = LabelForm
     template_name = 'labels/update.html'
-    success_url = reverse_lazy('labels_index')  # Изменить с 'labels_list' на 'labels_index'
+    success_url = reverse_lazy('labels_list')
     success_message = _('Label updated successfully')
 
 
 class LabelDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Label
     template_name = 'labels/delete.html'
-    success_url = reverse_lazy('labels_index')  # Изменить с 'labels_list' на 'labels_index'
+    success_url = reverse_lazy('labels_list')
     success_message = _('Label deleted successfully')
 
     def post(self, request, *args, **kwargs):
         label = self.get_object()
         try:
-            if label.tasks.exists():  # Изменить с label.task_set.exists() на label.tasks.exists()
+            if label.task_set.exists():
                 messages.error(request, _('Cannot delete label linked to tasks'))
-                return redirect('labels_index')  # Изменить с 'labels_list' на 'labels_index'
+                return redirect('labels_list')
 
             messages.success(request, self.success_message)
             return super().post(request, *args, **kwargs)
         except ProtectedError:
             messages.error(request, _('Cannot delete label linked to tasks'))
-            return redirect('labels_index')  # Изменить с 'labels_list' на 'labels_index'
+            return redirect('labels_list')

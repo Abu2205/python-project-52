@@ -1,48 +1,56 @@
-<!-- templates/users/index.html -->
 {% extends "base.html" %}
 {% load i18n %}
 
 {% block title %}{% trans "Users" %} - {{ block.super }}{% endblock %}
 
 {% block content %}
-<!-- Page Header -->
-<h1 class="my-4">{% trans "Users" %}</h1>
-
-<!-- Users Table -->
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>{% trans "ID" %}</th>
-            <th>{% trans "Username" %}</th>
-            <th>{% trans "Full name" %}</th>
-            <th>{% trans "Date created" %}</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for user_item in users %}
-        <tr>
-            <td>{{ user_item.id }}</td>
-            <td>{{ user_item.username }}</td>
-            <td>{{ user_item.get_full_name|default:"—" }}</td>
-            <td>{{ user_item.date_joined|date:"d.m.Y H:i" }}</td>
-            <td>
-                {% if request.user == user_item %}
-                    <a href="{% url 'user_update' user_item.pk %}">{% trans "Edit" %}</a>
-                    <br>
-                    <a href="{% url 'user_delete' user_item.pk %}">{% trans "Delete" %}</a>
-                {% else %}
-                    —
-                {% endif %}
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="5" class="text-center text-muted">
-                {% trans "No users found" %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">{% trans "Users" %}</h1>
+            
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>{% trans "ID" %}</th>
+                            <th>{% trans "Username" %}</th>
+                            <th>{% trans "Full name" %}</th>
+                            <th>{% trans "Date created" %}</th>
+                            <th>{% trans "Actions" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user_item in users %}
+                        <tr>
+                            <td>{{ user_item.id }}</td>
+                            <td>{{ user_item.username }}</td>
+                            <td>{{ user_item.get_full_name|default:"—" }}</td>
+                            <td>{{ user_item.date_joined|date:"d.m.Y H:i" }}</td>
+                            <td>
+                                {% if request.user == user_item %}
+                                    <a href="{% url 'user_update' user_item.pk %}" class="btn btn-sm btn-outline-primary">
+                                        {% trans "Edit" %}
+                                    </a>
+                                    <a href="{% url 'user_delete' user_item.pk %}" class="btn btn-sm btn-outline-danger">
+                                        {% trans "Delete" %}
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                {% trans "No users found" %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
