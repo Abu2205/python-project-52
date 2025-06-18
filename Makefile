@@ -74,22 +74,23 @@ makemessages:
 compilemessages:
 	uv run python manage.py compilemessages
 
-	# Запуск тестов с pytest
+	# Запуск тестов
 test:
-	uv run pytest
-
-# Запуск тестов Django
-test-django:
 	uv run python manage.py test
 
-# Запуск тестов с покрытием
+# Запуск тестов с pytest (альтернативный вариант)
+test-pytest:
+	uv run python -m pytest
+
+# Запуск тестов с покрытием (если установлен coverage)
 test-coverage:
-	uv run pytest --cov=task_manager_app --cov-report=html --cov-report=term
+	uv run coverage run --source='.' manage.py test
+	uv run coverage report
 
 # Запуск только быстрых тестов
 test-fast:
-	uv run pytest -m "not slow"
+	uv run python manage.py test --keepdb
 
-# Запуск только тестов фильтрации
-test-filters:
-	uv run pytest -m filter
+# Запуск конкретного теста
+test-app:
+	uv run python manage.py test task_manager_app
