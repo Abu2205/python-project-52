@@ -52,10 +52,22 @@ class UserRegistrationForm(UserCreationForm):
         self.fields['password2'].help_text = _(
             'Enter the same password as before, for verification.'
         )
-
+        
 
 class UserUpdateForm(forms.ModelForm):
     """Форма обновления пользователя"""
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label=_('Password'),
+        help_text=_('Your password must contain at least 3 characters.'),
+        required=False
+    )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label=_('Password confirmation'),
+        help_text=_('Enter the same password as before, for verification.'),
+        required=False
+    )
     
     class Meta:
         model = User
@@ -70,6 +82,22 @@ class UserUpdateForm(forms.ModelForm):
             'last_name': _('Last name'),
             'username': _('Username'),
         }
+    
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Passwords don't match")
+        return password2
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        password = self.cleaned_data.get("password1")
+        if password:
+            user.set_password(password)
+        if commit:
+            user.save()
+        return user
 
 
 class StatusForm(forms.ModelForm):

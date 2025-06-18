@@ -17,12 +17,20 @@
                         {% for field in form %}
                             <div class="mb-3">
                                 <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                                <input type="{{ field.field.widget.input_type|default:'text' }}" 
-                                       class="form-control{% if field.errors %} is-invalid{% endif %}" 
-                                       name="{{ field.name }}" 
-                                       id="{{ field.id_for_label }}"
-                                       value="{{ field.value|default:'' }}"
-                                       {% if field.field.required %}required{% endif %}>
+                                {% if field.name == 'password1' or field.name == 'password2' %}
+                                    <input type="password" 
+                                           class="form-control{% if field.errors %} is-invalid{% endif %}" 
+                                           name="{{ field.name }}" 
+                                           id="{{ field.id_for_label }}"
+                                           value="">
+                                {% else %}
+                                    <input type="{{ field.field.widget.input_type|default:'text' }}" 
+                                           class="form-control{% if field.errors %} is-invalid{% endif %}" 
+                                           name="{{ field.name }}" 
+                                           id="{{ field.id_for_label }}"
+                                           value="{{ field.value|default:'' }}"
+                                           {% if field.field.required %}required{% endif %}>
+                                {% endif %}
                                 {% if field.help_text %}
                                     <div class="form-text">{{ field.help_text }}</div>
                                 {% endif %}

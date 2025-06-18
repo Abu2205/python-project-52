@@ -62,6 +62,16 @@ class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return redirect('users_index')
         return super().dispatch(request, *args, **kwargs)
 
+    def form_valid(self, form):
+        """Обрабатываем форму и перелогиниваем пользователя если пароль изменился"""
+        user = form.save()
+        # Если пароль был изменен, нужно заново авторизовать пользователя
+        password = form.cleaned_data.get('password1')
+        if password:
+            from django.contrib.auth import update_session_auth_hash
+            update_session_auth_hash(self.request, user)
+        return super().form_valid(form)
+
 
 class UserDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     """Удаление пользователя"""
