@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
@@ -13,6 +14,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key-here')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+DEBUG = True  # Устанавливаем DEBUG в True для разработки
 
 ALLOWED_HOSTS = ['webserver', 'localhost', '127.0.0.1']
 
@@ -67,8 +69,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'task_manager.wsgi.application'
 
 # Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASE_URL = os.getenv('DATABASE_URL')
 
 if DATABASE_URL and DATABASE_URL != 'postgresql://user:password@localhost:5432/dbname':
@@ -86,8 +86,6 @@ else:
     }
 
 # Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -104,13 +102,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 LANGUAGES = [
-    ('en', 'English'),
     ('ru', 'Русский'),
+    ('en', 'English'),
 ]
 
 TIME_ZONE = 'UTC'
@@ -125,14 +121,10 @@ LOCALE_PATHS = [
 ]
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Logging
@@ -148,3 +140,21 @@ LOGGING = {
         'handlers': ['console'],
     },
 }
+
+# Rollbar configuration
+ROLLBAR_TOKEN = os.getenv('ROLLBAR_ACCESS_TOKEN')
+
+if ROLLBAR_TOKEN and 'test' not in sys.argv:
+    import rollbar
+    
+    ROLLBAR = {
+        'access_token': ROLLBAR_TOKEN,
+        'environment': 'development' if DEBUG else 'production',
+        'code_version': '1.0',
+        'root': BASE_DIR,
+    }
+    
+    rollbar.init(**ROLLBAR)
+    
+    # Добавляем middleware только если токен настроен и не в тестах
+    MIDDLEWARE.append('rollbar.contrib.django.middleware.RollbarNotifierMiddleware')

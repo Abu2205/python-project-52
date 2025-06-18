@@ -18,6 +18,16 @@ class IndexView(TemplateView):
     """Главная страница с приветствием"""
     template_name = 'index.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # ВРЕМЕННО: Тест для Rollbar
+        if self.request.GET.get('test_rollbar'):
+            a = None
+            a.hello()  # Создаем ошибку для тестирования
+            
+        return context
+
 
 # ========== USER VIEWS ==========
 
@@ -238,7 +248,7 @@ class LabelCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Label
     form_class = LabelForm
     template_name = 'labels/create.html'
-    success_url = reverse_lazy('labels_list')
+    success_url = reverse_lazy('labels_index')
     success_message = _('Label created successfully')
 
 
@@ -246,25 +256,25 @@ class LabelUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Label
     form_class = LabelForm
     template_name = 'labels/update.html'
-    success_url = reverse_lazy('labels_list')
+    success_url = reverse_lazy('labels_index')  # Изменить с 'labels_list' на 'labels_index'
     success_message = _('Label updated successfully')
 
 
 class LabelDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Label
     template_name = 'labels/delete.html'
-    success_url = reverse_lazy('labels_list')
+    success_url = reverse_lazy('labels_index')  # Изменить с 'labels_list' на 'labels_index'
     success_message = _('Label deleted successfully')
 
     def post(self, request, *args, **kwargs):
         label = self.get_object()
         try:
-            if label.task_set.exists():
+            if label.tasks.exists():  # Изменить с label.task_set.exists() на label.tasks.exists()
                 messages.error(request, _('Cannot delete label linked to tasks'))
-                return redirect('labels_list')
+                return redirect('labels_index')  # Изменить с 'labels_list' на 'labels_index'
 
             messages.success(request, self.success_message)
             return super().post(request, *args, **kwargs)
         except ProtectedError:
             messages.error(request, _('Cannot delete label linked to tasks'))
-            return redirect('labels_list')
+            return redirect('labels_index')  # Изменить с 'labels_list' на 'labels_index'

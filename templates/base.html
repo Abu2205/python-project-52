@@ -1,6 +1,7 @@
+<!-- templates/base.html -->
 {% load i18n %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,57 +11,45 @@
 <body class="d-flex flex-column min-vh-100">
     
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/">{% trans "Task Manager" %}</a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light ms-3">
+        <a class="navbar-brand" href="/">{% trans "Task Manager" %}</a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarToggleExternalContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users_index' %}">{% trans "Users" %}</a>
+                </li>
+                {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'index' %}">{% trans "Home" %}</a>
+                        <a class="nav-link" href="{% url 'statuses_index' %}">{% trans "Statuses" %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'users_index' %}">{% trans "Users" %}</a>
+                        <a class="nav-link" href="{% url 'labels_index' %}">{% trans "Labels" %}</a>
                     </li>
-                    {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'statuses_index' %}">{% trans "Statuses" %}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'labels_index' %}">{% trans "Labels" %}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'tasks_index' %}">{% trans "Tasks" %}</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                                {{ user.get_full_name|default:user.username }}
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'user_update' user.pk %}">{% trans "Edit profile" %}</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form method="post" action="{% url 'logout' %}" class="d-inline">
-                                        {% csrf_token %}
-                                        <button type="submit" class="dropdown-item">{% trans "Logout" %}</button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">{% trans "Login" %}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'user_create' %}">{% trans "Sign up" %}</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'tasks_index' %}">{% trans "Tasks" %}</a>
+                    </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <input class="btn nav-link" type="submit" value="{% trans 'Logout' %}">
+                    </form>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">{% trans "Login" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user_create' %}">{% trans "Sign up" %}</a>
+                    </li>
+                {% endif %}
+            </ul>
         </div>
     </nav>
 
@@ -76,19 +65,16 @@
         </div>
     {% endif %}
 
-    <!-- Main Content -->
-    <main class="flex-grow-1">
+    <!-- Main Content Container -->
+    <div class="container wrapper flex-grow-1">
         {% block content %}
         {% endblock %}
-    </main>
+    </div>
 
     <!-- Footer -->
-    <footer class="bg-light py-4 mt-auto">
-        <div class="container text-center">
-            <p class="text-muted mb-0">
-                {% trans "Created by" %} 
-                <a href="https://hexlet.io" class="text-decoration-none">Hexlet</a>
-            </p>
+    <footer>
+        <div class="container my-5 pt-4 border-top">
+            <a target="_blank" href="https://ru.hexlet.io">{% trans "Created by" %} Hexlet</a>
         </div>
     </footer>
 
