@@ -22,6 +22,8 @@
                                        name="{{ field.name }}" 
                                        id="{{ field.id_for_label }}"
                                        value="{{ field.value|default:'' }}"
+                                       {% if field.name == 'username' %}placeholder="Имя пользователя"{% endif %}
+                                       {% if field.name == 'password' %}placeholder="Пароль"{% endif %}
                                        {% if field.field.required %}required{% endif %}>
                                 {% if field.help_text %}
                                     <div class="form-text">{{ field.help_text }}</div>
