@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
@@ -12,7 +13,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key-here')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+DEBUG = True  # Устанавливаем DEBUG в True для разработки
 
 ALLOWED_HOSTS = ['webserver', 'localhost', '127.0.0.1']
 
@@ -142,21 +144,17 @@ LOGGING = {
 # Rollbar configuration
 ROLLBAR_TOKEN = os.getenv('ROLLBAR_ACCESS_TOKEN')
 
-if ROLLBAR_TOKEN:
-    try:
-        import rollbar
-        
-        ROLLBAR = {
-            'access_token': ROLLBAR_TOKEN,
-            'environment': 'development' if DEBUG else 'production',
-            'code_version': '1.0',
-            'root': BASE_DIR,
-        }
-        
-        rollbar.init(**ROLLBAR)
-        
-        # Добавляем middleware только если токен настроен
-        MIDDLEWARE.append('rollbar.contrib.django.middleware.RollbarNotifierMiddleware')
-    except ImportError:
-        # Rollbar не установлен, пропускаем
-        pass
+if ROLLBAR_TOKEN and 'test' not in sys.argv:
+    import rollbar
+    
+    ROLLBAR = {
+        'access_token': ROLLBAR_TOKEN,
+        'environment': 'development' if DEBUG else 'production',
+        'code_version': '1.0',
+        'root': BASE_DIR,
+    }
+    
+    rollbar.init(**ROLLBAR)
+    
+    # Добавляем middleware только если токен настроен и не в тестах
+    MIDDLEWARE.append('rollbar.contrib.django.middleware.RollbarNotifierMiddleware')

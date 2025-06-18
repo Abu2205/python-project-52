@@ -15,17 +15,13 @@ lint:
 	uv run flake8 .
 	uv run isort --check-diff .
 
-# Запуск тестов
+# Запуск тестов Django
 test:
-	uv run python -m pytest
-
-# Запуск тестов Django стиле (альтернативный способ)
-test-django:
 	uv run python manage.py test
 
-# Запуск тестов с покрытием (если установлен coverage)
+# Запуск тестов с покрытием
 test-coverage:
-	uv run coverage run --source='.' -m pytest
+	uv run coverage run --source='.' manage.py test
 	uv run coverage report
 
 # Создание суперпользователя
@@ -73,24 +69,3 @@ makemessages:
 # Компиляция переводов
 compilemessages:
 	uv run python manage.py compilemessages
-
-	# Запуск тестов
-test:
-	uv run python manage.py test
-
-# Запуск тестов с pytest (альтернативный вариант)
-test-pytest:
-	uv run python -m pytest
-
-# Запуск тестов с покрытием (если установлен coverage)
-test-coverage:
-	uv run coverage run --source='.' manage.py test
-	uv run coverage report
-
-# Запуск только быстрых тестов
-test-fast:
-	uv run python manage.py test --keepdb
-
-# Запуск конкретного теста
-test-app:
-	uv run python manage.py test task_manager_app

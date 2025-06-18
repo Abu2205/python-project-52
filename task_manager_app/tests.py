@@ -46,7 +46,7 @@ class IndexViewTest(BaseTestCase):
         """Тест отображения главной страницы"""
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Hello from Hexlet!')
+        self.assertContains(response, 'Привет от Хекслета!')
 
 
 class UserViewsTest(BaseTestCase):
