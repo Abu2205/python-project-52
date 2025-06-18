@@ -17,11 +17,15 @@ lint:
 
 # Запуск тестов
 test:
-	python -m pytest
+	uv run python -m pytest
+
+# Запуск тестов Django стиле (альтернативный способ)
+test-django:
+	uv run python manage.py test
 
 # Запуск тестов с покрытием (если установлен coverage)
 test-coverage:
-	uv run coverage run --source='.' manage.py test
+	uv run coverage run --source='.' -m pytest
 	uv run coverage report
 
 # Создание суперпользователя
@@ -69,3 +73,23 @@ makemessages:
 # Компиляция переводов
 compilemessages:
 	uv run python manage.py compilemessages
+
+	# Запуск тестов с pytest
+test:
+	uv run pytest
+
+# Запуск тестов Django
+test-django:
+	uv run python manage.py test
+
+# Запуск тестов с покрытием
+test-coverage:
+	uv run pytest --cov=task_manager_app --cov-report=html --cov-report=term
+
+# Запуск только быстрых тестов
+test-fast:
+	uv run pytest -m "not slow"
+
+# Запуск только тестов фильтрации
+test-filters:
+	uv run pytest -m filter
