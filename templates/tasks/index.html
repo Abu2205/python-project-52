@@ -7,7 +7,7 @@
 <h1 class="my-4">{% trans "Tasks" %}</h1>
 
 <!-- Create Task Button -->
-<a class="btn btn-primary mb-3" href="{% url 'task_create' %}" role="button">{% trans "Create task" %}</a>
+<a class="btn btn-primary mb-3" href="{% url 'task_create' %}" role="button">Создать задачу</a>
 
 <!-- Filter Form -->
 <div class="card mb-3">
@@ -67,10 +67,10 @@
             </td>
             <td>{{ task.created_at|date:"d.m.Y H:i" }}</td>
             <td>
-                <a href="{% url 'task_update' task.pk %}">{% trans "Edit" %}</a>
+                <a href="{% url 'task_update' task.pk %}">Изменить</a>
                 <br>
                 {% if user == task.author %}
-                    <a href="{% url 'task_delete' task.pk %}">{% trans "Delete" %}</a>
+                    <a href="{% url 'task_delete' task.pk %}">Удалить</a>
                 {% endif %}
             </td>
         </tr>

@@ -181,11 +181,15 @@ class TaskListView(LoginRequiredMixin, FilterView):
     context_object_name = 'tasks'
     filterset_class = TaskFilter
     login_url = '/login/'  # Явно указываем URL для входа
+    redirect_field_name = 'next'  # Параметр для редиректа после входа
     
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Передаем фильтр в контекст для отображения формы
         context['filter'] = self.filterset
+        context['debug_user'] = self.request.user
+        context['debug_authenticated'] = self.request.user.is_authenticated
         return context
 
 
