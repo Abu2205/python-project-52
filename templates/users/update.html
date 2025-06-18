@@ -21,8 +21,7 @@
                                     <input type="password" 
                                            class="form-control{% if field.errors %} is-invalid{% endif %}" 
                                            name="{{ field.name }}" 
-                                           id="{{ field.id_for_label }}"
-                                           value="">
+                                           id="{{ field.id_for_label }}">
                                 {% else %}
                                     <input type="{{ field.field.widget.input_type|default:'text' }}" 
                                            class="form-control{% if field.errors %} is-invalid{% endif %}" 
@@ -55,4 +54,19 @@
         </div>
     </div>
 </div>
+
+<script>
+// Устанавливаем атрибут value в null для полей паролей
+document.addEventListener('DOMContentLoaded', function() {
+    const password1 = document.getElementById('id_password1');
+    const password2 = document.getElementById('id_password2');
+    
+    if (password1) {
+        password1.removeAttribute('value');
+    }
+    if (password2) {
+        password2.removeAttribute('value');
+    }
+});
+</script>
 {% endblock %}

@@ -57,13 +57,13 @@ class UserRegistrationForm(UserCreationForm):
 class UserUpdateForm(forms.ModelForm):
     """Форма обновления пользователя"""
     password1 = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}, render_value=False),
         label=_('Password'),
         help_text=_('Your password must contain at least 3 characters.'),
         required=False
     )
     password2 = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}, render_value=False),
         label=_('Password confirmation'),
         help_text=_('Enter the same password as before, for verification.'),
         required=False
