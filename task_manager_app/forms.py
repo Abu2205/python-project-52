@@ -5,6 +5,17 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Status, Task, Label
 
+
+class UserChoiceField(forms.ModelChoiceField):
+    
+    def label_from_instance(self, obj):
+        """Определяет, как отображать каждого пользователя в select"""
+        full_name = obj.get_full_name()
+        if full_name:
+            return f"{full_name}"
+        return obj.username
+
+
 class UserLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -16,6 +27,7 @@ class UserLoginForm(AuthenticationForm):
             'class': 'form-control',
             'placeholder': 'Пароль'
         })
+
 
 class UserRegistrationForm(UserCreationForm):
     """Форма регистрации пользователя"""
