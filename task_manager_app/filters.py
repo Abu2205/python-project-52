@@ -13,13 +13,15 @@ class TaskFilter(django_filters.FilterSet):
     status = django_filters.ModelChoiceFilter(
         queryset=Status.objects.all(),
         empty_label="---------",
-        widget=forms.Select(attrs={'class': 'form-select ml-2 mr-3'})
+        widget=forms.Select(attrs={'class': 'form-select ml-2 mr-3'}),
+        label="Статус"
     )
     
     executor = django_filters.ModelChoiceFilter(
         queryset=User.objects.all(),
         empty_label="---------",
-        widget=forms.Select(attrs={'class': 'form-select mr-3 ml-2'})
+        widget=forms.Select(attrs={'class': 'form-select mr-3 ml-2'}),
+        label="Исполнитель"
     )
     
     # Используем имя label вместо labels для соответствия тесту
@@ -28,13 +30,13 @@ class TaskFilter(django_filters.FilterSet):
         queryset=Label.objects.all(),
         empty_label="---------",
         widget=forms.Select(attrs={'class': 'form-select mr-3 ml-2'}),
-        label="Label"
+        label="Метка"  # Используем русский текст напрямую
     )
     
     # Изменяем имя поля с author_tasks на self_tasks
     self_tasks = django_filters.BooleanFilter(
         method='filter_author_tasks',
-        label=_("Only my tasks"),
+        label="Только свои задачи",  # Используем русский текст напрямую
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input mr-3'})
     )
 
