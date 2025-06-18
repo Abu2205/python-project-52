@@ -1,4 +1,3 @@
-<!-- templates/tasks/index.html -->
 {% extends "base.html" %}
 {% load i18n %}
 
@@ -48,7 +47,7 @@
             <th>{% trans "Author" %}</th>
             <th>{% trans "Executor" %}</th>
             <th>{% trans "Date created" %}</th>
-            <th></th>
+            <th>Действия</th>
         </tr>
     </thead>
     <tbody>
@@ -67,10 +66,9 @@
             </td>
             <td>{{ task.created_at|date:"d.m.Y H:i" }}</td>
             <td>
-                <a href="{% url 'task_update' task.pk %}">Изменить</a>
-                <br>
+                <a href="{% url 'task_update' task.pk %}" class="btn btn-outline-primary btn-sm d-block mb-1">Изменить</a>
                 {% if user == task.author %}
-                    <a href="{% url 'task_delete' task.pk %}">Удалить</a>
+                    <a href="{% url 'task_delete' task.pk %}" class="btn btn-outline-danger btn-sm d-block">Удалить</a>
                 {% endif %}
             </td>
         </tr>

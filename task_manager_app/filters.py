@@ -7,17 +7,6 @@ from django.utils.translation import gettext_lazy as _
 from .models import Task, Status, Label
 
 
-class UserChoiceField(forms.ModelChoiceField):
-    """Кастомное поле для отображения пользователей"""
-    
-    def label_from_instance(self, obj):
-        """Определяет, как отображать каждого пользователя в select"""
-        full_name = obj.get_full_name()
-        if full_name:
-            return f"{full_name}"
-        return obj.username
-
-
 class TaskFilter(django_filters.FilterSet):
     """Фильтр для задач"""
     
@@ -32,8 +21,7 @@ class TaskFilter(django_filters.FilterSet):
         queryset=User.objects.all(),
         empty_label="---------",
         widget=forms.Select(attrs={'class': 'form-select mr-3 ml-2'}),
-        label="Исполнитель",
-        field_class=UserChoiceField
+        label="Исполнитель"
     )
     
     # Используем имя label вместо labels для соответствия тесту

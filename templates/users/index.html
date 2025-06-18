@@ -16,7 +16,7 @@
             <th>{% trans "Username" %}</th>
             <th>{% trans "Full name" %}</th>
             <th>{% trans "Date created" %}</th>
-            <th></th>
+            <th>Действия</th>
         </tr>
     </thead>
     <tbody>
@@ -28,9 +28,10 @@
             <td>{{ user_item.date_joined|date:"d.m.Y H:i" }}</td>
             <td>
                 {% if request.user == user_item %}
-                    <a href="{% url 'user_update' user_item.pk %}">{% trans "Edit" %}</a>
-                    <br>
-                    <a href="{% url 'user_delete' user_item.pk %}">{% trans "Delete" %}</a>
+                    <div class="d-flex flex-column gap-1">
+                        <a href="{% url 'user_update' user_item.pk %}" class="btn btn-outline-primary btn-sm">Изменить</a>
+                        <a href="{% url 'user_delete' user_item.pk %}" class="btn btn-outline-danger btn-sm">Удалить</a>
+                    </div>
                 {% else %}
                     —
                 {% endif %}
