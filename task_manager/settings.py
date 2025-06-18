@@ -67,6 +67,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'task_manager.wsgi.application'
 
 # Database
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
 DATABASE_URL = os.getenv('DATABASE_URL')
 
 if DATABASE_URL and DATABASE_URL != 'postgresql://user:password@localhost:5432/dbname':
@@ -84,6 +86,8 @@ else:
     }
 
 # Password validation
+# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -100,6 +104,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
+# https://docs.djangoproject.com/en/4.2/topics/i18n/
+
 LANGUAGE_CODE = 'en-us'
 
 LANGUAGES = [
@@ -119,10 +125,14 @@ LOCALE_PATHS = [
 ]
 
 # Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.2/howto/static-files/
+
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
+# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Logging
@@ -138,21 +148,3 @@ LOGGING = {
         'handlers': ['console'],
     },
 }
-
-# Rollbar configuration
-ROLLBAR_TOKEN = os.getenv('ROLLBAR_ACCESS_TOKEN')
-
-if ROLLBAR_TOKEN:
-    import rollbar
-    
-    ROLLBAR = {
-        'access_token': ROLLBAR_TOKEN,
-        'environment': 'development' if DEBUG else 'production',
-        'code_version': '1.0',
-        'root': BASE_DIR,
-    }
-    
-    rollbar.init(**ROLLBAR)
-    
-    # Добавляем middleware только если токен настроен
-    MIDDLEWARE.append('rollbar.contrib.django.middleware.RollbarNotifierMiddleware')
