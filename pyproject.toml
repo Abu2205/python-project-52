@@ -24,6 +24,8 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["task_manager"]
+packages = ["task_manager_app"]
+
 
 [tool.uv]
 dev-dependencies = [
