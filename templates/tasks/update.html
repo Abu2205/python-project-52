@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container wrapper flex-grow-1">
-    <h1 class="my-4">Изменение задачи</h1>
+    <h1 class="my-4">{% trans "Изменение задачи" %}</h1>
     <form method="post">
         <input type="hidden" name="csrfmiddlewaretoken" value="0ISCajLbHpBhaTKwMYYN7AAK7ac4UMs0GMuFJqqvZLmMuzp330xQ7ptcjMi94BPF">
         {% csrf_token %}
