@@ -1,53 +1,13 @@
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block title %}{% trans "Sign up" %} - {{ block.super }}{% endblock %}
+{% block title %}Регистрация - {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title mb-0">{% trans "Sign up" %}</h3>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {% for field in form %}
-                            <div class="mb-3">
-                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                                <input type="{{ field.field.widget.input_type|default:'text' }}" 
-                                       class="form-control{% if field.errors %} is-invalid{% endif %}" 
-                                       name="{{ field.name }}" 
-                                       id="{{ field.id_for_label }}"
-                                       value="{{ field.value|default:'' }}"
-                                       {% if field.field.required %}required{% endif %}>
-                                {% if field.help_text %}
-                                    <div class="form-text">{{ field.help_text }}</div>
-                                {% endif %}
-                                {% if field.errors %}
-                                    <div class="invalid-feedback">
-                                        {% for error in field.errors %}{{ error }}{% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">
-                                {% trans "Register" %}
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <div class="card-footer text-center">
-                    <small class="text-muted">
-                        {% trans "Already have an account?" %}
-                        <a href="{% url 'login' %}">{% trans "Login here" %}</a>
-                    </small>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<h1 class="my-4">Регистрация</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3"><label class="form-label" for="id_first_name">Имя</label><input type="text" name="first_name" maxlength="150" class="form-control" placeholder="Имя" required="" id="id_first_name"></div><div class="mb-3"><label class="form-label" for="id_last_name">Фамилия</label><input type="text" name="last_name" maxlength="150" class="form-control" placeholder="Фамилия" required="" id="id_last_name"></div><div class="mb-3"><label class="form-label" for="id_username">Имя пользователя</label><input type="text" name="username" maxlength="150" autofocus="" class="form-control" placeholder="Имя пользователя" required="" aria-describedby="id_username_helptext" id="id_username"><div class="form-text">Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_.</div></div><div class="mb-3"><label class="form-label" for="id_password1">Пароль</label><input type="password" name="password1" autocomplete="new-password" class="form-control" placeholder="Пароль" aria-describedby="id_password1_helptext" id="id_password1"><div class="form-text"><ul><li>Ваш пароль должен содержать как минимум 3 символа.</li></ul></div></div><div class="mb-3"><label class="form-label" for="id_password2">Подтверждение пароля</label><input type="password" name="password2" autocomplete="new-password" class="form-control" placeholder="Подтверждение пароля" aria-describedby="id_password2_helptext" id="id_password2"><div class="form-text">Для подтверждения введите, пожалуйста, пароль ещё раз.</div></div>
+    <input class="btn btn-primary" type="submit" value="Зарегистрировать">
+</form>
 {% endblock %}

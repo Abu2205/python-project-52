@@ -18,10 +18,8 @@ Task Manager - это веб-приложение на Django для управ�
 ## Локальная установка и запуск
 
 1. Склонируйте репозиторий:
-```bash
-git clone https://github.com/your-username/hexlet-code.git
+git clone https://github.com/Abu2205/python-project-52.git
 cd hexlet-code
-```
 
 2. Установите зависимости:
 ```bash

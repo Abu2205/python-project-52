@@ -1,4 +1,3 @@
-# task_manager_app/tests.py
 """
 Тесты для Django приложения Task Manager
 """
@@ -15,7 +14,6 @@ class BaseTestCase(TestCase):
     def setUp(self):
         self.client = Client()
         
-        # Создаем тестовых пользователей
         self.user1 = User.objects.create_user(
             username='testuser1',
             first_name='Test',
@@ -30,11 +28,9 @@ class BaseTestCase(TestCase):
             password='testpass123'
         )
         
-        # Создаем тестовые статусы
         self.status1 = Status.objects.create(name='New')
         self.status2 = Status.objects.create(name='In Progress')
         
-        # Создаем тестовые метки
         self.label1 = Label.objects.create(name='Bug')
         self.label2 = Label.objects.create(name='Feature')
 
@@ -155,7 +151,6 @@ class TaskViewsTest(BaseTestCase):
     
     def test_task_list_view_with_auth(self):
         """Тест списка задач с авторизацией"""
-        # Создаем тестовую задачу
         Task.objects.create(
             name='Test Task',
             status=self.status1,
@@ -207,7 +202,6 @@ class TaskFilterTest(BaseTestCase):
     def setUp(self):
         super().setUp()
         
-        # Создаем задачи для тестирования фильтров
         self.task1 = Task.objects.create(
             name='Task 1',
             status=self.status1,
@@ -237,7 +231,6 @@ class TaskFilterTest(BaseTestCase):
         response = self.client.get(reverse('tasks_index'), {'status': self.status1.pk})
         self.assertEqual(response.status_code, 200)
         
-        # Должны быть task1 и task3
         self.assertContains(response, 'Task 1')
         self.assertContains(response, 'Task 3')
         self.assertNotContains(response, 'Task 2')
@@ -249,7 +242,6 @@ class TaskFilterTest(BaseTestCase):
         response = self.client.get(reverse('tasks_index'), {'executor': self.user1.pk})
         self.assertEqual(response.status_code, 200)
         
-        # Должна быть только task2
         self.assertContains(response, 'Task 2')
         self.assertNotContains(response, 'Task 1')
         self.assertNotContains(response, 'Task 3')
@@ -261,7 +253,6 @@ class TaskFilterTest(BaseTestCase):
         response = self.client.get(reverse('tasks_index'), {'label': self.label1.pk})
         self.assertEqual(response.status_code, 200)
         
-        # Должна быть только task1
         self.assertContains(response, 'Task 1')
         self.assertNotContains(response, 'Task 2')
         self.assertNotContains(response, 'Task 3')
@@ -273,7 +264,6 @@ class TaskFilterTest(BaseTestCase):
         response = self.client.get(reverse('tasks_index'), {'self_tasks': 'on'})
         self.assertEqual(response.status_code, 200)
         
-        # Должны быть task1 и task3 (автор user1)
         self.assertContains(response, 'Task 1')
         self.assertContains(response, 'Task 3')
         self.assertNotContains(response, 'Task 2')
@@ -282,14 +272,12 @@ class TaskFilterTest(BaseTestCase):
         """Тест комбинированных фильтров"""
         self.client.force_login(self.user1)
         
-        # Фильтр по статусу и автору
         response = self.client.get(reverse('tasks_index'), {
             'status': self.status1.pk,
             'self_tasks': 'on'
         })
         self.assertEqual(response.status_code, 200)
         
-        # Должны быть task1 и task3
         self.assertContains(response, 'Task 1')
         self.assertContains(response, 'Task 3')
         self.assertNotContains(response, 'Task 2')

@@ -1,4 +1,3 @@
-# task_manager_app/filters.py
 import django_filters
 from django import forms
 from django.contrib.auth.models import User
@@ -24,19 +23,18 @@ class TaskFilter(django_filters.FilterSet):
         label="Исполнитель"
     )
     
-    # Используем имя label вместо labels для соответствия тесту
+
     label = django_filters.ModelChoiceFilter(
-        field_name='labels',  # Указываем реальное поле модели
+        field_name='labels',
         queryset=Label.objects.all(),
         empty_label="---------",
         widget=forms.Select(attrs={'class': 'form-select mr-3 ml-2'}),
-        label="Метка"  # Используем русский текст напрямую
+        label="Метка"
     )
-    
-    # Изменяем имя поля с author_tasks на self_tasks
+
     self_tasks = django_filters.BooleanFilter(
         method='filter_author_tasks',
-        label="Только свои задачи",  # Используем русский текст напрямую
+        label="Только свои задачи",
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input mr-3'})
     )
 

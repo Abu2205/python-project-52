@@ -21,10 +21,10 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # ВРЕМЕННО: Тест для Rollbar
+
         if self.request.GET.get('test_rollbar'):
             a = None
-            a.hello()  # Создаем ошибку для тестирования
+            a.hello()
             
         return context
 
@@ -44,7 +44,7 @@ class UserCreateView(SuccessMessageMixin, CreateView):
     form_class = UserRegistrationForm
     template_name = 'users/create.html'
     success_url = reverse_lazy('login')
-    success_message = _('User successfully registered')
+    success_message = _('Пользователь успешно зарегистрирован')
 
 
 class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -53,24 +53,33 @@ class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     form_class = UserUpdateForm
     template_name = 'users/update.html'
     success_url = reverse_lazy('users_index')
-    success_message = _('User successfully updated')
+    success_message = _('Пользователь успешно изменен')
 
     def dispatch(self, request, *args, **kwargs):
         """Проверяем, что пользователь может редактировать только себя"""
         if request.user.id != kwargs.get('pk'):
-            messages.error(request, _('You have no rights to change another user.'))
+            messages.error(request, _('У вас нет прав изменять другого пользователя.'))
             return redirect('users_index')
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         """Обрабатываем форму и перелогиниваем пользователя если пароль изменился"""
         user = form.save()
-        # Если пароль был изменен, нужно заново авторизовать пользователя
         password = form.cleaned_data.get('password1')
         if password:
             from django.contrib.auth import update_session_auth_hash
             update_session_auth_hash(self.request, user)
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        """Обрабатываем ошибки валидации - остаемся на той же странице"""
+        return super().form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        """Добавляем дополнительный контекст"""
+        context = super().get_context_data(**kwargs)
+        return context
+
 
 
 class UserDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -78,12 +87,12 @@ class UserDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = User
     template_name = 'users/delete.html'
     success_url = reverse_lazy('users_index')
-    success_message = _('User successfully deleted')
+    success_message = _('Пользователь успешно удален')
 
     def dispatch(self, request, *args, **kwargs):
         """Проверяем, что пользователь может удалять только себя"""
         if request.user.id != kwargs.get('pk'):
-            messages.error(request, _('You have no rights to change another user.'))
+            messages.error(request, _('У вас нет прав изменять другого пользователя.'))
             return redirect('users_index')
         return super().dispatch(request, *args, **kwargs)
 
@@ -91,22 +100,21 @@ class UserDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         """Проверяем, что у пользователя нет связанных задач перед удалением"""
         user = self.get_object()
         try:
-            # Проверяем, есть ли задачи, связанные с пользователем
             if user.authored_tasks.exists() or user.assigned_tasks.exists():
-                messages.error(request, _('Cannot delete user that is in use'))
+                messages.error(request, _('Невозможно удалить пользователя, который используется'))
                 return redirect('users_index')
             
             messages.success(request, self.success_message)
             return super().post(request, *args, **kwargs)
         except ProtectedError:
-            messages.error(request, _('Cannot delete user that is in use'))
+            messages.error(request, _('Невозможно удалить пользователя, который используется'))
             return redirect('users_index')
 
 
 class UserLoginView(SuccessMessageMixin, LoginView):
-    form_class = UserLoginForm  # Добавить эту строку
+    form_class = UserLoginForm
     template_name = 'users/login.html'
-    success_message = _('You are logged in')
+    success_message = _('Вы залогинены')
     
     def get_success_url(self):
         return reverse_lazy('index')
@@ -118,7 +126,7 @@ class UserLogoutView(LogoutView):
     
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            messages.info(request, _('You are logged out'))
+            messages.info(request, _('Вы разлогинены'))
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -137,7 +145,7 @@ class StatusCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = StatusForm
     template_name = 'statuses/create.html'
     success_url = reverse_lazy('statuses_index')
-    success_message = _('Status successfully created')
+    success_message = _('Статус успешно создан')
 
 
 class StatusUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -146,7 +154,7 @@ class StatusUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     form_class = StatusForm
     template_name = 'statuses/update.html'
     success_url = reverse_lazy('statuses_index')
-    success_message = _('Status successfully updated')
+    success_message = _('Статус успешно изменен')
 
 
 class StatusDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -154,21 +162,20 @@ class StatusDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Status
     template_name = 'statuses/delete.html'
     success_url = reverse_lazy('statuses_index')
-    success_message = _('Status successfully deleted')
+    success_message = _('Статус успешно удален')
 
     def post(self, request, *args, **kwargs):
         """Проверяем, что статус не связан с задачами перед удалением"""
         status = self.get_object()
         try:
-            # Проверяем, есть ли задачи с этим статусом
             if status.task_set.exists():
-                messages.error(request, _('Cannot delete status that is in use'))
+                messages.error(request, _('Невозможно удалить статус, который используется'))
                 return redirect('statuses_index')
             
             messages.success(request, self.success_message)
             return super().post(request, *args, **kwargs)
         except ProtectedError:
-            messages.error(request, _('Cannot delete status that is in use'))
+            messages.error(request, _('Невозможно удалить статус, который используется'))
             return redirect('statuses_index')
 
 
@@ -184,7 +191,6 @@ class TaskListView(FilterView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Передаем фильтр в контекст для отображения формы
         context['filter'] = self.filterset
         return context
 
@@ -202,7 +208,7 @@ class TaskCreateView(SuccessMessageMixin, CreateView):
     form_class = TaskForm
     template_name = 'tasks/create.html'
     success_url = reverse_lazy('tasks_index')
-    success_message = _('Task successfully created')
+    success_message = _('Задача успешно создана')
 
     def form_valid(self, form):
         """Устанавливаем автора задачи"""
@@ -220,7 +226,7 @@ class TaskUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     form_class = TaskForm
     template_name = 'tasks/update.html'
     success_url = reverse_lazy('tasks_index')
-    success_message = _('Task successfully updated')
+    success_message = _('Задача успешно изменена')
 
 
 class TaskDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -228,13 +234,13 @@ class TaskDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Task
     template_name = 'tasks/delete.html'
     success_url = reverse_lazy('tasks_index')
-    success_message = _('Task successfully deleted')
+    success_message = _('Задача успешно удалена')
 
     def get(self, request, *args, **kwargs):
         """Проверяем права доступа при GET запросе"""
         task = self.get_object()
         if request.user != task.author:
-            messages.error(request, _('Only task author can delete it'))
+            messages.error(request, _('Задачу может удалить только ее автор'))
             return redirect('tasks_index')
         return super().get(request, *args, **kwargs)
 
@@ -242,7 +248,7 @@ class TaskDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         """Проверяем права доступа при POST запросе"""
         task = self.get_object()
         if request.user != task.author:
-            messages.error(request, _('Only task author can delete it'))
+            messages.error(request, _('Задачу может удалить только ее автор'))
             return redirect('tasks_index')
         return super().post(request, *args, **kwargs)
     
@@ -258,32 +264,32 @@ class LabelCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = LabelForm
     template_name = 'labels/create.html'
     success_url = reverse_lazy('labels_index')
-    success_message = _('Label created successfully')
+    success_message = _('Метка успешно создана')
 
 
 class LabelUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Label
     form_class = LabelForm
     template_name = 'labels/update.html'
-    success_url = reverse_lazy('labels_index')  # Изменить с 'labels_list' на 'labels_index'
-    success_message = _('Label updated successfully')
+    success_url = reverse_lazy('labels_index')
+    success_message = _('Метка успешно изменена')
 
 
 class LabelDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Label
     template_name = 'labels/delete.html'
-    success_url = reverse_lazy('labels_index')  # Изменить с 'labels_list' на 'labels_index'
-    success_message = _('Label deleted successfully')
+    success_url = reverse_lazy('labels_index')
+    success_message = _('Метка успешно удалена')
 
     def post(self, request, *args, **kwargs):
         label = self.get_object()
         try:
-            if label.tasks.exists():  # Изменить с label.task_set.exists() на label.tasks.exists()
-                messages.error(request, _('Cannot delete label linked to tasks'))
-                return redirect('labels_index')  # Изменить с 'labels_list' на 'labels_index'
+            if label.tasks.exists():
+                messages.error(request, _('Невозможно удалить метку, связанную с задачами'))
+                return redirect('labels_index')
 
             messages.success(request, self.success_message)
             return super().post(request, *args, **kwargs)
         except ProtectedError:
-            messages.error(request, _('Cannot delete label linked to tasks'))
-            return redirect('labels_index')  # Изменить с 'labels_list' на 'labels_index'
+            messages.error(request, _('Невозможно удалить метку, связанную с задачами'))
+            return redirect('labels_index')

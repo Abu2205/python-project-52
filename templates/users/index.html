@@ -1,22 +1,21 @@
 <!-- templates/users/index.html -->
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block title %}{% trans "Users" %} - {{ block.super }}{% endblock %}
+{% block title %}Пользователи - {{ block.super }}{% endblock %}
 
 {% block content %}
 <!-- Page Header -->
-<h1 class="my-4">{% trans "Users" %}</h1>
+<h1 class="my-4">Пользователи</h1>
 
 <!-- Users Table -->
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>{% trans "ID" %}</th>
-            <th>{% trans "Username" %}</th>
-            <th>{% trans "Full name" %}</th>
-            <th>{% trans "Date created" %}</th>
-            <th>Действия</th>
+            <th>ID</th>
+            <th>Имя пользователя</th>
+            <th>Полное имя</th>
+            <th>Дата создания</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -27,20 +26,16 @@
             <td>{{ user_item.get_full_name|default:"—" }}</td>
             <td>{{ user_item.date_joined|date:"d.m.Y H:i" }}</td>
             <td>
-                {% if request.user == user_item %}
-                    <div class="d-flex flex-column gap-1">
-                        <a href="{% url 'user_update' user_item.pk %}" class="btn btn-outline-primary btn-sm">Изменить</a>
-                        <a href="{% url 'user_delete' user_item.pk %}" class="btn btn-outline-danger btn-sm">Удалить</a>
-                    </div>
-                {% else %}
-                    —
-                {% endif %}
+                <div class="d-flex flex-column gap-1">
+                    <a href="{% url 'user_update' user_item.pk %}">Изменить</a>
+                    <a href="{% url 'user_delete' user_item.pk %}">Удалить</a>
+                </div>
             </td>
         </tr>
         {% empty %}
         <tr>
             <td colspan="5" class="text-center text-muted">
-                {% trans "No users found" %}
+                Пользователи не найдены
             </td>
         </tr>
         {% endfor %}

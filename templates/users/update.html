@@ -4,69 +4,215 @@
 {% block title %}{% trans "Edit user" %} - {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title mb-0">{% trans "Edit user" %}</h3>
+<div class="container">
+    <div class="row justify-content-left">
+        <div class="col-md-8">
+            <h1 class="my-4">Изменение пользователя</h1>
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                <!-- Имя -->
+                <div class="mb-3">
+                    <label for="id_first_name" class="form-label">Имя</label>
+                    <div class="position-relative">
+                        <input type="text" 
+                               class="form-control pe-5 {% if form.first_name.errors %}is-invalid{% elif form.is_bound and form.first_name.value %}is-valid{% endif %}" 
+                               name="first_name" 
+                               id="id_first_name"
+                               value="{{ form.first_name.value|default:'' }}">
+                        {% if form.is_bound %}
+                            {% if form.first_name.errors %}
+                                <div class="validation-icon position-absolute top-50 end-0 translate-middle-y me-3 text-danger">
+                                    ⊘
+                                </div>
+                            {% elif form.first_name.value %}
+                                <div class="validation-icon position-absolute top-50 end-0 translate-middle-y me-3 text-success">
+                                    ✓
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    {% if form.first_name.errors %}
+                        <div class="text-danger small mt-1">Обязательное поле.</div>
+                    {% endif %}
                 </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {% for field in form %}
-                            <div class="mb-3">
-                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                                {% if field.name == 'password1' or field.name == 'password2' %}
-                                    <input type="password" 
-                                           class="form-control{% if field.errors %} is-invalid{% endif %}" 
-                                           name="{{ field.name }}" 
-                                           id="{{ field.id_for_label }}">
-                                {% else %}
-                                    <input type="{{ field.field.widget.input_type|default:'text' }}" 
-                                           class="form-control{% if field.errors %} is-invalid{% endif %}" 
-                                           name="{{ field.name }}" 
-                                           id="{{ field.id_for_label }}"
-                                           value="{{ field.value|default:'' }}"
-                                           {% if field.field.required %}required{% endif %}>
-                                {% endif %}
-                                {% if field.help_text %}
-                                    <div class="form-text">{{ field.help_text }}</div>
-                                {% endif %}
-                                {% if field.errors %}
-                                    <div class="invalid-feedback">
-                                        {% for error in field.errors %}{{ error }}{% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">
-                                {% trans "Update" %}
-                            </button>
-                            <a href="{% url 'users_index' %}" class="btn btn-secondary">
-                                {% trans "Cancel" %}
-                            </a>
+
+                <!-- Фамилия -->
+                <div class="mb-3">
+                    <label for="id_last_name" class="form-label">Фамилия</label>
+                    <div class="position-relative">
+                        <input type="text" 
+                               class="form-control pe-5 {% if form.last_name.errors %}is-invalid{% elif form.is_bound and form.last_name.value %}is-valid{% endif %}" 
+                               name="last_name" 
+                               id="id_last_name"
+                               value="{{ form.last_name.value|default:'' }}">
+                        {% if form.is_bound %}
+                            {% if form.last_name.errors %}
+                                <div class="validation-icon position-absolute top-50 end-0 translate-middle-y me-3 text-danger">
+                                    ⊘
+                                </div>
+                            {% elif form.last_name.value %}
+                                <div class="validation-icon position-absolute top-50 end-0 translate-middle-y me-3 text-success">
+                                    ✓
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    {% if form.last_name.errors %}
+                        <div class="text-danger small mt-1">Обязательное поле.</div>
+                    {% endif %}
+                </div>
+
+                <!-- Имя пользователя -->
+                <div class="mb-3">
+                    <label for="id_username" class="form-label">Имя пользователя</label>
+                    <div class="position-relative">
+                        <input type="text" 
+                               class="form-control pe-5 {% if form.username.errors %}is-invalid{% elif form.is_bound and form.username.value %}is-valid{% endif %}" 
+                               name="username" 
+                               id="id_username"
+                               value="{{ form.username.value|default:'' }}">
+                        {% if form.is_bound %}
+                            {% if form.username.errors %}
+                                <div class="validation-icon position-absolute top-50 end-0 translate-middle-y me-3 text-danger">
+                                    ⊘
+                                </div>
+                            {% elif form.username.value %}
+                                <div class="validation-icon position-absolute top-50 end-0 translate-middle-y me-3 text-success">
+                                    ✓
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="form-text text-muted small">
+                        Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_.
+                    </div>
+                    {% if form.username.errors %}
+                        <div class="text-danger small mt-1">
+                            {% for error in form.username.errors %}{{ error }}{% endfor %}
                         </div>
-                    </form>
+                    {% endif %}
                 </div>
-            </div>
+
+                <!-- Пароль -->
+                <div class="mb-3">
+                    <label for="id_password1" class="form-label">Пароль</label>
+                    <div class="position-relative">
+                        <input type="password" 
+                               class="form-control pe-5 {% if form.password1.errors %}is-invalid{% elif form.is_bound and form.password1.value %}is-valid{% endif %}" 
+                               name="password1" 
+                               id="id_password1"
+                               placeholder="Пароль">
+                        {% if form.is_bound %}
+                            {% if form.password1.errors %}
+                                <div class="validation-icon position-absolute top-50 end-0 translate-middle-y me-3 text-danger">
+                                    ⊘
+                                </div>
+                            {% elif form.password1.value %}
+                                <div class="validation-icon position-absolute top-50 end-0 translate-middle-y me-3 text-success">
+                                    ✓
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    {% if form.password1.errors %}
+                        <div class="text-danger small mt-1">Обязательное поле.</div>
+                    {% endif %}
+                    <ul class="small text-muted mt-1 mb-0">
+                        <li>Ваш пароль должен содержать как минимум 3 символа.</li>
+                    </ul>
+                </div>
+
+                <!-- Подтверждение пароля -->
+                <div class="mb-4">
+                    <label for="id_password2" class="form-label">Подтверждение пароля</label>
+                    <div class="position-relative">
+                        <input type="password" 
+                               class="form-control pe-5 {% if form.password2.errors %}is-invalid{% elif form.is_bound and form.password2.value %}is-valid{% endif %}" 
+                               name="password2" 
+                               id="id_password2"
+                               placeholder="Подтверждение пароля">
+                        {% if form.is_bound %}
+                            {% if form.password2.errors %}
+                                <div class="validation-icon position-absolute top-50 end-0 translate-middle-y me-3 text-danger">
+                                    ⊘
+                                </div>
+                            {% elif form.password2.value %}
+                                <div class="validation-icon position-absolute top-50 end-0 translate-middle-y me-3 text-success">
+                                    ✓
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    {% if form.password2.errors %}
+                        <div class="text-danger small mt-1">Обязательное поле.</div>
+                    {% endif %}
+                    <div class="form-text text-muted small">
+                        Для подтверждения введите, пожалуйста, пароль ещё раз.
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Изменить
+                </button>
+            </form>
         </div>
     </div>
 </div>
 
-<script>
-// Устанавливаем атрибут value в null для полей паролей
-document.addEventListener('DOMContentLoaded', function() {
-    const password1 = document.getElementById('id_password1');
-    const password2 = document.getElementById('id_password2');
-    
-    if (password1) {
-        password1.removeAttribute('value');
-    }
-    if (password2) {
-        password2.removeAttribute('value');
-    }
-});
-</script>
+<style>
+.validation-icon {
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 10;
+}
+
+.form-control.is-valid {
+    border-color: #28a745 !important;
+    background-color: #f8fff9 !important;
+    /* Убираем постоянный glow */
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545 !important;
+    background-color: #fff5f5 !important;
+    /* Убираем постоянный glow */
+}
+
+/* Glow только при фокусе */
+.form-control.is-valid:focus {
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+.form-control.is-invalid:focus {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Убираем стандартные иконки Bootstrap */
+.form-control.is-valid,
+.form-control.is-invalid {
+    background-image: none !important;
+    padding-right: calc(1.5em + 0.75rem) !important;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.form-text.text-muted {
+    color: #6c757d !important;
+}
+
+/* Обычное поведение фокуса для остальных полей */
+.form-control:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+</style>
+
 {% endblock %}

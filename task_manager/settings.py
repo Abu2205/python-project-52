@@ -6,24 +6,20 @@ import dj_database_url
 
 load_dotenv()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key-here')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
-DEBUG = True  # Устанавливаем DEBUG в True для разработки
+DEBUG = True
 
 ALLOWED_HOSTS = ['webserver', 'localhost', '127.0.0.1']
 
-# Добавляем домен render.com если он есть в переменных окружения
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -68,16 +64,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'task_manager.wsgi.application'
 
-# Database
+
 DATABASE_URL = os.getenv('DATABASE_URL')
 
 if DATABASE_URL and DATABASE_URL != 'postgresql://user:password@localhost:5432/dbname':
-    # Используем PostgreSQL только если DATABASE_URL реально настроен
     DATABASES = {
         'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
     }
 else:
-    # Для локальной разработки используем SQLite
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -85,7 +79,6 @@ else:
         }
     }
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -101,7 +94,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization - Форсируем русский язык
 LANGUAGE_CODE = 'ru'
 
 LANGUAGES = [
@@ -111,12 +103,10 @@ LANGUAGES = [
 
 TIME_ZONE = 'UTC'
 
-# Принудительно включаем интернационализацию и локализацию
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Принудительно устанавливаем русскую локаль
 import locale
 try:
     locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
@@ -126,24 +116,19 @@ except:
     except:
         pass
 
-# Путь к файлам локализации
 LOCALE_PATHS = [
     BASE_DIR / 'locale',
 ]
 
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Login/Logout URLs
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Logging
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -157,7 +142,6 @@ LOGGING = {
     },
 }
 
-# Rollbar configuration
 ROLLBAR_TOKEN = os.getenv('ROLLBAR_ACCESS_TOKEN')
 
 if ROLLBAR_TOKEN and 'test' not in sys.argv:
@@ -172,5 +156,4 @@ if ROLLBAR_TOKEN and 'test' not in sys.argv:
     
     rollbar.init(**ROLLBAR)
     
-    # Добавляем middleware только если токен настроен и не в тестах
     MIDDLEWARE.append('rollbar.contrib.django.middleware.RollbarNotifierMiddleware')

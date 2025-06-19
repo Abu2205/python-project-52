@@ -2,77 +2,84 @@
 {% load i18n %}
 
 {% block content %}
-<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h3>{% trans "Edit task" %}</h3>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {% for field in form %}
-                            <div class="mb-3">
-                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                                {% if field.name == 'description' %}
-                                    <textarea class="form-control" 
-                                             name="{{ field.name }}" 
-                                             id="{{ field.id_for_label }}"
-                                             rows="4">{{ field.value|default:'' }}</textarea>
-                                {% elif field.name == 'status' or field.name == 'executor' %}
-                                    <select class="form-select" 
-                                           name="{{ field.name }}" 
-                                           id="{{ field.id_for_label }}"
-                                           {% if field.name == 'status' %}required{% endif %}>
-                                        {% if field.name == 'executor' %}
-                                            <option value="">{% trans "Select executor" %}</option>
-                                        {% endif %}
-                                        {% for choice in field.field.queryset %}
-                                            <option value="{{ choice.pk }}" 
-                                                   {% if choice.pk == field.value %}selected{% endif %}>
-                                                {% if field.name == 'executor' %}
-                                                    {{ choice.get_full_name|default:choice.username }}
-                                                {% else %}
-                                                    {{ choice }}
-                                                {% endif %}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                {% elif field.name == 'labels' %}
-                                    <select class="form-select" 
-                                           name="{{ field.name }}" 
-                                           id="{{ field.id_for_label }}"
-                                           multiple>
-                                        {% for choice in field.field.queryset %}
-                                            <option value="{{ choice.pk }}" 
-                                                   {% if choice.pk in field.value %}selected{% endif %}>
-                                                {{ choice.name }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                    <div class="form-text">{% trans "Hold Ctrl/Cmd to select multiple labels" %}</div>
-                                {% else %}
-                                    <input type="text" 
-                                           class="form-control" 
-                                           name="{{ field.name }}" 
-                                           id="{{ field.id_for_label }}"
-                                           value="{{ field.value|default:'' }}"
-                                           required>
-                                {% endif %}
-                                {% if field.errors %}
-                                    <div class="text-danger">
-                                        {% for error in field.errors %}{{ error }}{% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                        <button type="submit" class="btn btn-primary">{% trans "Update" %}</button>
-                        <a href="{% url 'tasks_index' %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
-                    </form>
+<div class="container wrapper flex-grow-1">
+    <h1 class="my-4">Изменение задачи</h1>
+    <form method="post">
+        <input type="hidden" name="csrfmiddlewaretoken" value="0ISCajLbHpBhaTKwMYYN7AAK7ac4UMs0GMuFJqqvZLmMuzp330xQ7ptcjMi94BPF">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="label-form"> {# Новый div, как запрошено #}
+                <div class="mb-3>
+                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    
+                    {% if field.name == 'description' %}
+                        <textarea name="{{ field.name }}" 
+                                  cols="40" 
+                                  rows="10" 
+                                  class="form-control" 
+                                  placeholder="Описание" 
+                                  id="{{ field.id_for_label }}" 
+                                  spellcheck="false" 
+                                  aria-label="To enrich screen reader interactions, please activate Accessibility in Grammarly extension settings">{{ field.value|default:'' }}</textarea>
+                    {% elif field.name == 'status' or field.name == 'executor' or field.name == 'labels' %}
+                        <select name="{{ field.name }}" 
+                                class="form-select" 
+                                id="{{ field.id_for_label }}"
+                                {% if field.name == 'status' %}required=""{% endif %}
+                                {% if field.name == 'labels' %}multiple=""{% endif %}>
+                            
+                            {% comment %} Опция '---------' добавляется только для полей 'status' и 'executor' {% endcomment %}
+                            {% if field.name != 'labels' %}
+                                <option value="" selected>---------</option>
+                            {% endif %}
+
+                            {% for choice in field.field.queryset %}
+                                <option value="{{ choice.pk }}" 
+                                        {% comment %} Проверка выбранных опций в зависимости от типа поля {% endcomment %}
+                                        {% if field.name == 'labels' %}
+                                            {% if choice in field.value %}selected{% endif %}
+                                        {% else %}
+                                            {% comment %} Для одиночного выбора (статус, исполнитель) {% endcomment %}
+                                            {% if choice.pk == field.value %}selected{% endif %}
+                                        {% endif %}>
+                                    {% if field.name == 'executor' %}
+                                        {{ choice.get_full_name|default:choice.username }}
+                                    {% elif field.name == 'labels' %}
+                                        {{ choice.name }}
+                                    {% else %}
+                                        {{ choice }}
+                                    {% endif %}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {% if field.name == 'labels' %}
+                            {% comment %} Содержание form-text было удалено в предыдущем запросе пользователя, что соответствует скриншоту. {% endcomment %}
+                        {% endif %}
+                    {% else %}
+                        <input type="text" 
+                               name="{{ field.name }}" 
+                               maxlength="150" 
+                               class="form-control" 
+                               placeholder="Имя" 
+                               required="" 
+                               id="{{ field.id_for_label }}"
+                               value="{{ field.value|default:'' }}">
+                    {% endif %}
+
+                    {% if field.errors %}
+                        <div class="text-danger">
+                            {% for error in field.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if field.help_text %}
+                        <div class="form-text">{{ field.help_text }}</div>
+                    {% endif %}
                 </div>
             </div>
-        </div>
-    </div>
+        {% endfor %}
+
+        <input class="btn btn-primary" type="submit" value="Изменить">
+    </form>
 </div>
 {% endblock %}

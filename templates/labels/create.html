@@ -1,9 +1,9 @@
-<!-- templates/labels/create.html -->
 {% extends "base.html" %}
 {% load i18n %}
 
 {% block content %}
-<h1 class="my-4">{% trans "Create label" %}</h1>
+<h1 class="my-4">Создать Метку</h1>
+
 
 <form method="post">
     {% csrf_token %}
@@ -25,6 +25,6 @@
             {% endif %}
         </div>
     {% endfor %}
-    <input class="btn btn-primary" type="submit" value="{% trans 'Create' %}">
+    <input class="btn btn-primary" type="submit" value="{% trans 'Создать' %}">
 </form>
 {% endblock %}
