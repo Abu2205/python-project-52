@@ -5,7 +5,6 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Status(models.Model):
-    """Модель статуса задачи"""
     name = models.CharField(
         max_length=150,
         unique=True,
@@ -15,6 +14,7 @@ class Status(models.Model):
         auto_now_add=True,
         verbose_name=_('Created at')
     )
+
 
     class Meta:
         verbose_name = _('Status')
@@ -26,7 +26,6 @@ class Status(models.Model):
 
 
 class Task(models.Model):
-    """Модель задачи"""
     name = models.CharField(
         max_length=150,
         verbose_name=_('Name')
@@ -65,6 +64,7 @@ class Task(models.Model):
         verbose_name=_('Created at')
     )
 
+
     class Meta:
         verbose_name = _('Task')
         verbose_name_plural = _('Tasks')
@@ -72,10 +72,11 @@ class Task(models.Model):
 
     def __str__(self):
         return self.name
+    
 
 class Label(models.Model):
-    name = models.CharField(max_length=100, unique=True, 
-                            verbose_name=_("Name"
+    name = models.CharField(
+        max_length=100, unique=True, verbose_name=_("Name"
     ))
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name=_("Created at"

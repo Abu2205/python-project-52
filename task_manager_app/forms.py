@@ -11,7 +11,6 @@ from .models import Status, Task, Label
 class UserChoiceField(forms.ModelChoiceField):
     
     def label_from_instance(self, obj):
-        """Определяет, как отображать каждого пользователя в select"""
         full_name = obj.get_full_name()
         if full_name:
             return f"{full_name}"
@@ -23,55 +22,45 @@ class UserLoginForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({
             'class': 'form-control',
-            'placeholder': 'Имя пользователя'
-        })
+            'placeholder': 'Имя пользователя'})
         self.fields['password'].widget.attrs.update({
             'class': 'form-control',
-            'placeholder': 'Пароль'
-        })
+            'placeholder': 'Пароль'})
 
 
 class UserRegistrationForm(UserCreationForm):
-    """Форма регистрации пользователя"""
     first_name = forms.CharField(
         max_length=30,
         required=True,
         label=_('Имя'),
-        widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
+    
     last_name = forms.CharField(
         max_length=30,
         required=True,
         label=_('Фамилия'),
-        widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username', 
-                  'password1', 'password2'
-        )
+                  'password1', 'password2')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({'class': 'form-control'})
         self.fields['password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['password2'].widget.attrs.update({'class': 'form-control'})
-        
-
         self.fields['username'].label = _('Имя пользователя')
         self.fields['password1'].label = _('Пароль')
         self.fields['password2'].label = _('Подтверждение пароля')
         self.fields['password1'].help_text = _(
-            'Ваш пароль должен содержать как минимум 3 символа.'
-        )
+            'Ваш пароль должен содержать как минимум 3 символа.')
         self.fields['password2'].help_text = _(
-            'Введите тот же пароль, что и раньше, для подтверждения.'
-        )
+            'Введите тот же пароль, что и раньше, для подтверждения.')
         
 
 class UserUpdateForm(forms.ModelForm):
-    """Форма обновления пользователя"""
     password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'class': 'form-control'}, render_value=False
@@ -89,6 +78,7 @@ class UserUpdateForm(forms.ModelForm):
         required=True
     )
     
+
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username')
@@ -112,28 +102,23 @@ class UserUpdateForm(forms.ModelForm):
     def clean_username(self):
         username = self.cleaned_data.get('username')
         if not username:
-            raise ValidationError('Имя пользователя является ' \
-            'обязательным полем.'
-        )
-        
+            raise ValidationError(
+                'Имя пользователя является обязательным полем.')
 
         if len(username) > 150:
-            raise ValidationError('Имя пользователя не может быть ' \
-            'длиннее 150 символов.'
-        )
+            raise ValidationError(
+                'Имя пользователя не может быть длиннее 150 символов.')
         
-
         import re
         if not re.match(r'^[a-zA-Z0-9@./+\-_]+$', username):
-            raise ValidationError('Имя пользователя может содержать только буквы, ' \
-            'цифры и символы @/./+/-/_.'
+            raise ValidationError(
+                'Имя пользователя может содержать только буквы, цифры и символы @/./+/-/_.'
         )
         
         if self.instance.username != username:
             if User.objects.filter(username=username).exists():
-                raise ValidationError('Пользователь с таким именем ' \
-                'уже существует.'
-        )
+                raise ValidationError(
+                    'Пользователь с таким именем уже существует.')
         return username
     
     def clean_first_name(self):
@@ -163,9 +148,8 @@ class UserUpdateForm(forms.ModelForm):
         password2 = self.cleaned_data.get("password2")
         
         if not password2:
-            raise ValidationError('Подтверждение пароля является ' \
-            'обязательным полем.'
-        )
+            raise ValidationError(
+                'Подтверждение пароля является обязательным полем.')
         
         if password1 and password2 and password1 != password2:
             raise ValidationError("Пароли не совпадают.")
@@ -181,8 +165,10 @@ class UserUpdateForm(forms.ModelForm):
             user.save()
         return user
 
+
 class StatusForm(forms.ModelForm):
     
+
     class Meta:
         model = Status
         fields = ('name',)
@@ -199,9 +185,7 @@ class TaskForm(forms.ModelForm):
         queryset=User.objects.all(),
         required=False,
         label=_('Исполнитель'),
-        widget=forms.Select(attrs={'class': 'form-select'})
-    )
-
+        widget=forms.Select(attrs={'class': 'form-select'}))
 
     labels = forms.ModelMultipleChoiceField(
         queryset=Label.objects.all(),
@@ -209,19 +193,20 @@ class TaskForm(forms.ModelForm):
         widget=forms.SelectMultiple(attrs={'class': 'form-select'}),
         label=_('Метки')
     )
+
+
     class Meta:
         model = Task
         fields = ('name', 'description', 'status', 'executor', 'labels')
-        widgets = {
-            'name': forms.TextInput(attrs={
+        widgets = {'name': forms.TextInput(attrs={
                 'class': 'form-control', 'placeholder': _('Имя')
-            }),
+        }),
             'description': forms.Textarea(attrs={
                 'class': 'form-control', 'rows': 4, 'placeholder': _('Описание')
-            }),
+        }),
             'status': forms.Select(attrs={'class': 'form-select'}),
-
         }
+
         labels = {
             'name': _('Имя'),
             'description': _('Описание'),

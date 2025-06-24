@@ -27,15 +27,11 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-
         if self.request.GET.get('test_rollbar'):
             a = None
             a.hello()
-            
         return context
 
-
-# ========== USER VIEWS ==========
 
 class UserListView(ListView):
     model = User
@@ -60,8 +56,8 @@ class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.id != kwargs.get('pk'):
-            messages.error(request, _('У вас нет прав для изменения другого ' \
-            'пользователя.'
+            messages.error(request, _(
+                'У вас нет прав для изменения другого пользователя.'
             ))
             return redirect('users_index')
         return super().dispatch(request, *args, **kwargs)
@@ -89,29 +85,27 @@ class UserDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     success_message = _('Пользователь успешно удален')
 
     def dispatch(self, request, *args, **kwargs):
-        """Проверяем, что пользователь может удалять только себя"""
         if request.user.id != kwargs.get('pk'):
-            messages.error(request, _('У вас нет прав для изменения другого ' \
-            'пользователя.'
+            messages.error(request, _(
+                'У вас нет прав для изменения другого пользователя.'
             ))
             return redirect('users_index')
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        """Проверяем, что у пользователя нет связанных задач перед удалением"""
         user = self.get_object()
         try:
             if user.authored_tasks.exists() or user.assigned_tasks.exists():
-                messages.error(request, _('Невозможно удалить пользователя, ' \
-                'который используется'
+                messages.error(request, _(
+                    'Невозможно удалить пользователя, который используется'
                 ))
                 return redirect('users_index')
             
             messages.success(request, self.success_message)
             return super().post(request, *args, **kwargs)
         except ProtectedError:
-            messages.error(request, _('Невозможно удалить пользователя, ' \
-            'который используется'
+            messages.error(request, _(
+                'Невозможно удалить пользователя, который используется'
             ))
             return redirect('users_index')
 
@@ -126,7 +120,6 @@ class UserLoginView(SuccessMessageMixin, LoginView):
 
 
 class UserLogoutView(LogoutView):
-    """Выход пользователя"""
     next_page = '/'
     
     def dispatch(self, request, *args, **kwargs):
@@ -135,17 +128,13 @@ class UserLogoutView(LogoutView):
         return super().dispatch(request, *args, **kwargs)
 
 
-# ========== STATUS VIEWS ==========
-
 class StatusListView(LoginRequiredMixin, ListView):
-    """Список всех статусов"""
     model = Status
     template_name = 'statuses/index.html'
     context_object_name = 'statuses'
 
 
 class StatusCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-    """Создание нового статуса"""
     model = Status
     form_class = StatusForm
     template_name = 'statuses/create.html'
@@ -154,7 +143,6 @@ class StatusCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 
 class StatusUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-    """Редактирование статуса"""
     model = Status
     form_class = StatusForm
     template_name = 'statuses/update.html'
@@ -163,32 +151,28 @@ class StatusUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 class StatusDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    """Удаление статуса"""
     model = Status
     template_name = 'statuses/delete.html'
     success_url = reverse_lazy('statuses_index')
     success_message = _('Статус успешно удален')
 
     def post(self, request, *args, **kwargs):
-        """Проверяем, что статус не связан с задачами перед удалением"""
         status = self.get_object()
         try:
             if status.task_set.exists():
-                messages.error(request, _('Невозможно удалить статус, ' \
-                'который используется'
+                messages.error(request, _(
+                    'Невозможно удалить статус, который используется'
                 ))
                 return redirect('statuses_index')
             
             messages.success(request, self.success_message)
             return super().post(request, *args, **kwargs)
         except ProtectedError:
-            messages.error(request, _('Невозможно удалить статус, ' \
-            'который используется'
+            messages.error(request, _(
+                'Невозможно удалить статус, который используется
             ))
             return redirect('statuses_index')
 
-
-# ========== TASK VIEWS ==========
 
 class TaskListView(FilterView):
     """Список всех задач с фильтрацией"""
@@ -197,7 +181,6 @@ class TaskListView(FilterView):
     context_object_name = 'tasks'
     filterset_class = TaskFilter
     
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filter'] = self.filterset
@@ -205,14 +188,12 @@ class TaskListView(FilterView):
 
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
-    """Просмотр задачи"""
     model = Task
     template_name = 'tasks/detail.html'
     context_object_name = 'task'
 
 
 class TaskCreateView(SuccessMessageMixin, CreateView):
-    """Создание новой задачи"""
     model = Task
     form_class = TaskForm
     template_name = 'tasks/create.html'
@@ -220,7 +201,6 @@ class TaskCreateView(SuccessMessageMixin, CreateView):
     success_message = _('Задача успешно создана')
 
     def form_valid(self, form):
-        """Устанавливаем автора задачи"""
         if self.request.user.is_authenticated:
             form.instance.author = self.request.user
         else:
@@ -230,7 +210,6 @@ class TaskCreateView(SuccessMessageMixin, CreateView):
 
 
 class TaskUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-    """Редактирование задачи"""
     model = Task
     form_class = TaskForm
     template_name = 'tasks/update.html'
@@ -239,14 +218,12 @@ class TaskUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 class TaskDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    """Удаление задачи"""
     model = Task
     template_name = 'tasks/delete.html'
     success_url = reverse_lazy('tasks_index')
     success_message = _('Задача успешно удалена')
 
     def get(self, request, *args, **kwargs):
-        """Проверяем права доступа при GET запросе"""
         task = self.get_object()
         if request.user != task.author:
             messages.error(request, _('Задачу может удалить только ее автор'))
@@ -254,7 +231,6 @@ class TaskDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        """Проверяем права доступа при POST запросе"""
         task = self.get_object()
         if request.user != task.author:
             messages.error(request, _('Задачу может удалить только ее автор'))
@@ -294,15 +270,14 @@ class LabelDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         label = self.get_object()
         try:
             if label.tasks.exists():
-                messages.error(request, _('Невозможно удалить метку, ' \
-                'связанную с задачами'
+                messages.error(request, _(
+                    'Невозможно удалить метку, связанную с задачами'
                 ))
                 return redirect('labels_index')
-
             messages.success(request, self.success_message)
             return super().post(request, *args, **kwargs)
         except ProtectedError:
-            messages.error(request, _('Невозможно удалить метку, ' \
-            'связанную с задачами'
+            messages.error(request, _(
+                'Невозможно удалить метку, связанную с задачами'
             ))
             return redirect('labels_index')
