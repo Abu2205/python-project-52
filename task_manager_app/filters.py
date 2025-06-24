@@ -12,35 +12,38 @@ class TaskFilter(django_filters.FilterSet):
     status = django_filters.ModelChoiceFilter(
         queryset=Status.objects.all(),
         empty_label="---------",
-        widget=forms.Select(attrs={'class': 'form-select ml-2 mr-3'}),
-        label="Статус"
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label=_("Статус")
     )
     
+    # ==================== НАЧАЛО ИЗМЕНЕНИЙ ====================
     executor = django_filters.ModelChoiceFilter(
         queryset=User.objects.all(),
-        empty_label="---------",
-        widget=forms.Select(attrs={'class': 'form-select mr-3 ml-2'}),
-        label="Исполнитель"
+        label=_("Исполнитель"),
+        # Указываем, как отображать каждого пользователя в списке
+        field_name='executor',
+        label_from_instance=lambda obj: obj.get_full_name()
     )
-    
+    # ===================== КОНЕЦ ИЗМЕНЕНИЙ =====================
 
-    label = django_filters.ModelChoiceFilter(
+    labels = django_filters.ModelChoiceFilter(
         field_name='labels',
         queryset=Label.objects.all(),
         empty_label="---------",
-        widget=forms.Select(attrs={'class': 'form-select mr-3 ml-2'}),
-        label="Метка"
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label=_("Метка")
     )
 
     self_tasks = django_filters.BooleanFilter(
         method='filter_author_tasks',
-        label="Только свои задачи",
-        widget=forms.CheckboxInput(attrs={'class': 'form-check-input mr-3'})
+        label=_("Только свои задачи"),
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
     )
 
     class Meta:
         model = Task
-        fields = ['status', 'executor', 'label', 'self_tasks']
+        # Убрал 'label' и 'self_tasks' отсюда, т.к. они определены выше вручную
+        fields = ['status', 'executor'] 
 
     def filter_author_tasks(self, queryset, name, value):
         """Фильтр для отображения только задач текущего пользователя"""
