@@ -10,9 +10,11 @@ echo "--- Adding uv to PATH ---"
 # Явно добавляем директорию с uv в системный PATH
 export PATH="$HOME/.local/bin:$PATH"
 
+# --- ВЫПОЛНЯЕМ ВСЕ ШАГИ СБОРКИ ПРЯМО ЗДЕСЬ ---
+
 echo "--- Installing dependencies ---"
-# Используем uv напрямую для установки зависимостей
-uv sync --no-build
+# Используем uv напрямую, но БЕЗ флага --no-build
+uv sync
 
 echo "--- Running collectstatic ---"
 # Используем uv напрямую для сборки статики
