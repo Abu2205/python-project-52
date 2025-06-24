@@ -1,22 +1,18 @@
 #!/usr/bin/env bash
-# Скрипт сборки для Render.com
+# Останавливаем выполнение скрипта при любой ошибке
+set -o errexit
 
-set -o errexit  # Остановить выполнение при ошибке
-
-# Скачиваем uv
+echo "--- Installing uv ---"
+# Устанавливаем uv, как и раньше
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Добавляем uv в PATH
+echo "--- Adding uv to PATH ---"
+# Явно добавляем директорию с uv в системный PATH.
+# Это более надежный способ, чем 'source'.
 export PATH="$HOME/.local/bin:$PATH"
 
-# Установка зависимостей
+echo "--- Running build steps ---"
+# Теперь вызываем ваши команды make. Они смогут найти 'uv'.
 make install
-
-# Компиляция переводов
-make compilemessages
-
-# Сбор статических файлов
 make collectstatic
-
-# Применение миграций
 make migrate

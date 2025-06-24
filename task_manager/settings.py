@@ -8,16 +8,13 @@ from django.contrib.messages import constants as messages
 
 load_dotenv()
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key-here')
+SECRET_KEY = os.getenv('SECRET_KEY', 'your-local-secret-key-here')
 
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
-DEBUG = True
 
 ALLOWED_HOSTS = ['webserver', 'localhost', '127.0.0.1']
-
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
@@ -28,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'django_bootstrap5',
     'django_filters',
@@ -50,6 +48,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+if os.getenv('ROLLBAR_ACCESS_TOKEN'):
+    MIDDLEWARE.append('rollbar.contrib.django.middleware.RollbarNotifierMiddleware')
+
+
 ROOT_URLCONF = 'task_manager.urls'
 
 TEMPLATES = [
@@ -70,13 +72,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'task_manager.wsgi.application'
 
-
 DATABASE_URL = os.getenv('DATABASE_URL')
-
-if DATABASE_URL and DATABASE_URL != 'postgresql://user:password@localhost:5432/dbname':
-    DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
-    }
+if DATABASE_URL:
+    DATABASES = {'default': dj_database_url.config(conn_max_age=600)}
 else:
     DATABASES = {
         'default': {
@@ -85,80 +83,40 @@ else:
         }
     }
 
+
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 LANGUAGE_CODE = 'ru'
-
-LANGUAGES = [
-    ('ru', 'Русский'),
-    ('en', 'English'),
-]
-
-USE_I18N = True
+LANGUAGES = [('ru', 'Русский'), ('en', 'English')]
 TIME_ZONE = 'UTC'
+USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
-import locale
-try:
-    locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
-except:
-    try:
-        locale.setlocale(locale.LC_ALL, 'Russian_Russia.1251')
-    except:
-        pass
-
-LOCALE_PATHS = [
-    BASE_DIR / 'locale',
-]
+LOCALE_PATHS = [BASE_DIR / 'locale']
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+if not DEBUG:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-    },
-}
-
 ROLLBAR_TOKEN = os.getenv('ROLLBAR_ACCESS_TOKEN')
-
 if ROLLBAR_TOKEN and 'test' not in sys.argv:
     import rollbar
-    
     ROLLBAR = {
         'access_token': ROLLBAR_TOKEN,
         'environment': 'development' if DEBUG else 'production',
         'code_version': '1.0',
         'root': BASE_DIR,
     }
-    
     rollbar.init(**ROLLBAR)
-    
-    MIDDLEWARE.append('rollbar.contrib.django.middleware.RollbarNotifierMiddleware')
