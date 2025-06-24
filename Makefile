@@ -2,7 +2,7 @@
 
 # Установка зависимостей
 install:
-	uv sync --no-build
+	uv sync
 
 # Настройка для разработки
 dev-setup:
