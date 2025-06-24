@@ -187,6 +187,14 @@ class StatusForm(forms.ModelForm):
 
 class TaskForm(forms.ModelForm):
     """Форма для задачи"""
+    executor = UserChoiceField(
+        queryset=User.objects.all(),
+        required=False,
+        label=_('Исполнитель'),
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+
     labels = forms.ModelMultipleChoiceField(
         queryset=Label.objects.all(),
         required=False,
@@ -200,20 +208,18 @@ class TaskForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Имя')}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': _('Описание')}),
             'status': forms.Select(attrs={'class': 'form-select'}),
-            'executor': forms.Select(attrs={'class': 'form-select'}),
+
         }
         labels = {
             'name': _('Имя'),
             'description': _('Описание'),
             'status': _('Статус'),
-            'executor': _('Исполнитель'),
             'labels': _('Метки'),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['executor'].empty_label = "---------"
-        self.fields['executor'].required = False
 
 
 class LabelForm(forms.ModelForm):
