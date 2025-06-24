@@ -1,6 +1,6 @@
 # task_manager_app/views.py
 from django.views.generic import (
-    TemplateView, ListView, CreateView, 
+    TemplateView, ListView, CreateView,
     UpdateView, DeleteView, DetailView
 )
 from django.contrib.auth.views import LoginView, LogoutView
@@ -15,7 +15,7 @@ from django.db.models import ProtectedError
 from django_filters.views import FilterView
 from .filters import TaskFilter
 from .forms import (
-    UserRegistrationForm, UserUpdateForm, 
+    UserRegistrationForm, UserUpdateForm,
     StatusForm, TaskForm, LabelForm, UserLoginForm
 )
 from .models import Status, Task, Label
@@ -26,7 +26,7 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
+
         if self.request.GET.get('test_rollbar'):
             a = None
             a.hello()
@@ -100,7 +100,7 @@ class UserDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
                     'Невозможно удалить пользователя, который используется'
                 ))
                 return redirect('users_index')
-            
+
             messages.success(request, self.success_message)
             return super().post(request, *args, **kwargs)
         except ProtectedError:
@@ -121,7 +121,7 @@ class UserLoginView(SuccessMessageMixin, LoginView):
 
 class UserLogoutView(LogoutView):
     next_page = '/'
-    
+
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             messages.info(request, _('Вы разлогинены'))
@@ -164,12 +164,13 @@ class StatusDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
                     'Невозможно удалить статус, который используется'
                 ))
                 return redirect('statuses_index')
-            
+
             messages.success(request, self.success_message)
             return super().post(request, *args, **kwargs)
         except ProtectedError:
+            # ▼▼▼ ВОТ ИСПРАВЛЕННАЯ СТРОКА ▼▼▼
             messages.error(request, _(
-                'Невозможно удалить статус, который используется
+                'Невозможно удалить статус, который используется'
             ))
             return redirect('statuses_index')
 
@@ -180,7 +181,7 @@ class TaskListView(FilterView):
     template_name = 'tasks/index.html'
     context_object_name = 'tasks'
     filterset_class = TaskFilter
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filter'] = self.filterset
@@ -236,7 +237,7 @@ class TaskDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
             messages.error(request, _('Задачу может удалить только ее автор'))
             return redirect('tasks_index')
         return super().post(request, *args, **kwargs)
-    
+
 
 class LabelListView(LoginRequiredMixin, ListView):
     model = Label
