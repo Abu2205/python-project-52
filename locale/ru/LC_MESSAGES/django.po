@@ -3,290 +3,312 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 06:44+0000\n"
+"POT-Creation-Date: 2025-06-16 12:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
-"(n%100>=11 && n%100<=14)? 2 : 3);\n"
-#: task_manager_app/forms.py:39 task_manager_app/forms.py:184
-#: task_manager_app/forms.py:200 task_manager_app/forms.py:206
-#: task_manager_app/forms.py:234 templates/tasks/index.html:47
-msgid "Имя"
-msgstr ""
+"(n%100>=11 && n%100<=14) ? 2 : 3);\n"
 
-#: task_manager_app/forms.py:45
-msgid "Фамилия"
-msgstr ""
+msgid "Actions"
+msgstr "Действия"
 
-#: task_manager_app/forms.py:60
-msgid "Имя пользователя"
-msgstr ""
+msgid "Already have an account?"
+msgstr "Уже есть аккаунт?"
 
-#: task_manager_app/forms.py:61 task_manager_app/forms.py:75
-msgid "Пароль"
-msgstr ""
+msgid "Are you sure you want to delete"
+msgstr "Вы уверены, что хотите удалить"
 
-#: task_manager_app/forms.py:62 task_manager_app/forms.py:81
-msgid "Подтверждение пароля"
-msgstr ""
+msgid "Are you sure you want to delete label"
+msgstr "Вы уверены, что хотите удалить метку"
 
-#: task_manager_app/forms.py:64 task_manager_app/forms.py:76
-msgid "Ваш пароль должен содержать как минимум 3 символа."
-msgstr ""
+msgid "Are you sure you want to delete status"
+msgstr "Вы уверены, что хотите удалить статус"
 
-#: task_manager_app/forms.py:67 task_manager_app/forms.py:82
-msgid "Введите тот же пароль, что и раньше, для подтверждения."
-msgstr ""
+msgid "Are you sure you want to delete task"
+msgstr "Вы уверены, что хотите удалить задачу"
 
-#: task_manager_app/forms.py:95
-msgid "First name"
-msgstr ""
-
-#: task_manager_app/forms.py:96
-msgid "Last name"
-msgstr ""
-
-#: task_manager_app/forms.py:97
-msgid "Username"
-msgstr ""
-
-#: task_manager_app/forms.py:194 task_manager_app/forms.py:210
-msgid "Метки"
-msgstr ""
-
-#: task_manager_app/forms.py:201 task_manager_app/forms.py:207
-msgid "Описание"
-msgstr ""
-
-#: task_manager_app/forms.py:208 templates/tasks/index.html:48
-msgid "Статус"
-msgstr ""
-
-#: task_manager_app/forms.py:209 templates/tasks/index.html:53
-msgid "Исполнитель"
-msgstr ""
-
-#: task_manager_app/models.py:12 task_manager_app/models.py:32
-#: task_manager_app/models.py:77
-msgid "Name"
-msgstr ""
-
-#: task_manager_app/models.py:16 task_manager_app/models.py:65
-#: task_manager_app/models.py:78
-msgid "Created at"
-msgstr ""
-
-#: task_manager_app/models.py:20 task_manager_app/models.py:41
-#: templates/tasks/detail.html:25
-msgid "Status"
-msgstr ""
-
-#: task_manager_app/models.py:21
-msgid "Statuses"
-msgstr ""
-
-#: task_manager_app/models.py:36 templates/tasks/detail.html:81
-msgid "Description"
-msgstr ""
-
-#: task_manager_app/models.py:47 templates/tasks/detail.html:34
 msgid "Author"
-msgstr ""
+msgstr "Автор"
 
-#: task_manager_app/models.py:55 templates/tasks/detail.html:43
-msgid "Executor"
-msgstr ""
-
-#: task_manager_app/models.py:61 templates/tasks/detail.html:56
-msgid "Labels"
-msgstr ""
-
-#: task_manager_app/models.py:69
-msgid "Task"
-msgstr ""
-
-#: task_manager_app/models.py:70
-msgid "Tasks"
-msgstr ""
-
-#: task_manager_app/views.py:48
-msgid "Пользователь успешно зарегистрирован"
-msgstr ""
-
-#: task_manager_app/views.py:57
-msgid "Пользователь успешно изменен"
-msgstr ""
-
-#: task_manager_app/views.py:62 task_manager_app/views.py:96
-msgid "У вас нет прав изменять другого пользователя."
-msgstr ""
-
-#: task_manager_app/views.py:91
-msgid "Пользователь успешно удален"
-msgstr ""
-
-#: task_manager_app/views.py:105 task_manager_app/views.py:111
-msgid "Невозможно удалить пользователя, который используется"
-msgstr ""
-
-#: task_manager_app/views.py:118
-msgid "Вы залогинены"
-msgstr ""
-
-#: task_manager_app/views.py:121
-msgid ""
-"Пожалуйста, введите правильные имя пользователя и пароль. Оба поля могут "
-"быть чувствительны к регистру."
-msgstr ""
-
-#: task_manager_app/views.py:136
-msgid "Вы разлогинены"
-msgstr ""
-
-#: task_manager_app/views.py:155
-msgid "Статус успешно создан"
-msgstr ""
-
-#: task_manager_app/views.py:164
-msgid "Статус успешно изменен"
-msgstr ""
-
-#: task_manager_app/views.py:172
-msgid "Статус успешно удален"
-msgstr ""
-
-#: task_manager_app/views.py:179 task_manager_app/views.py:185
-msgid "Невозможно удалить статус, который используется"
-msgstr ""
-
-#: task_manager_app/views.py:218
-msgid "Задача успешно создана"
-msgstr ""
-
-#: task_manager_app/views.py:236
-msgid "Задача успешно изменена"
-msgstr ""
-
-#: task_manager_app/views.py:244
-msgid "Задача успешно удалена"
-msgstr ""
-
-#: task_manager_app/views.py:250 task_manager_app/views.py:258
-msgid "Задачу может удалить только ее автор"
-msgstr ""
-
-#: task_manager_app/views.py:274
-msgid "Метка успешно создана"
-msgstr ""
-
-#: task_manager_app/views.py:282
-msgid "Метка успешно изменена"
-msgstr ""
-
-#: task_manager_app/views.py:289
-msgid "Метка успешно удалена"
-msgstr ""
-
-#: task_manager_app/views.py:295 task_manager_app/views.py:301
-msgid "Невозможно удалить метку, связанную с задачами"
-msgstr ""
-
-#: templates/base.html:7
-msgid "Task Manager"
-msgstr ""
-
-#: templates/index.html:5
-msgid "Welcome"
-msgstr ""
-
-#: templates/labels/create.html:28 templates/statuses/create.html:29
-msgid "Создать"
-msgstr ""
-
-#: templates/labels/delete.html:8
-msgid "Удаление метки"
-msgstr ""
-
-#: templates/labels/delete.html:15 templates/statuses/delete.html:15
-#: templates/tasks/delete.html:15 templates/users/delete.html:14
-msgid "Да, удалить"
-msgstr ""
-
-#: templates/labels/index.html:38
-msgid "No labels found"
-msgstr ""
-
-#: templates/labels/update.html:29 templates/statuses/update.html:29
-msgid "Изменить"
-msgstr ""
-
-#: templates/statuses/delete.html:8
-msgid "Удаление статуса"
-msgstr ""
-
-#: templates/statuses/index.html:38
-msgid "No statuses found"
-msgstr ""
-
-#: templates/tasks/create.html:6
-msgid "Создать задачу"
-msgstr ""
-
-#: templates/tasks/delete.html:8
-msgid "Удаление задачи"
-msgstr ""
-
-#: templates/tasks/detail.html:13
-msgid "Edit"
-msgstr ""
-
-#: templates/tasks/detail.html:17
-msgid "Delete"
-msgstr ""
-
-#: templates/tasks/detail.html:71
-msgid "Date created"
-msgstr ""
-
-#: templates/tasks/detail.html:93
 msgid "Back to tasks"
-msgstr ""
+msgstr "Вернуться к задачам"
 
-#: templates/tasks/index.html:7
-msgid "Задачи"
-msgstr ""
+msgid "Cancel"
+msgstr "Отмена"
 
-#: templates/tasks/index.html:46
-msgid "ID"
-msgstr ""
+msgid "Cannot delete label that is in use"
+msgstr "Невозможно удалить метку, потому что она используется"
 
-#: templates/tasks/index.html:52
-msgid "Автор"
-msgstr ""
+msgid "Cannot delete status that is in use"
+msgstr "Невозможно удалить статус, потому что он используется"
 
-#: templates/tasks/index.html:54
-msgid "Дата создания"
-msgstr ""
+msgid "Cannot delete user that is in use"
+msgstr "Невозможно удалить пользователя, потому что он используется"
 
-#: templates/tasks/index.html:86
-msgid "No tasks found"
-msgstr ""
+msgid "Create"
+msgstr "Создать"
 
-#: templates/tasks/update.html:6
-msgid "Изменение задачи"
-msgstr ""
+msgid "Create label"
+msgstr "Создать метку"
 
-#: templates/users/update.html:4
+msgid "Create status"
+msgstr "Создать статус"
+
+msgid "Create task"
+msgstr "Создать задачу"
+
+msgid "Created at"
+msgstr "Дата создания"
+
+msgid "Created by"
+msgstr "Создано"
+
+msgid "Date created"
+msgstr "Дата создания"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "Delete label"
+msgstr "Удаление метки"
+
+msgid "Delete status"
+msgstr "Удаление статуса"
+
+msgid "Delete task"
+msgstr "Удаление задачи"
+
+msgid "Delete user"
+msgstr "Удаление пользователя"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "Don't have an account?"
+msgstr "Нет аккаунта?"
+
+msgid "Edit"
+msgstr "Изменить"
+
+msgid "Edit label"
+msgstr "Изменение метки"
+
+msgid "Edit profile"
+msgstr "Изменить профиль"
+
+msgid "Edit status"
+msgstr "Изменение статуса"
+
+msgid "Edit task"
+msgstr "Изменение задачи"
+
 msgid "Edit user"
-msgstr ""
+msgstr "Изменение пользователя"
+
+msgid "Enter the same password as before, for verification."
+msgstr "Для подтверждения введите тот же пароль, что и выше."
+
+msgid "Executor"
+msgstr "Исполнитель"
+
+msgid "First name"
+msgstr "Имя"
+
+msgid "Full name"
+msgstr "Полное имя"
+
+msgid "Hello from Hexlet!"
+msgstr "Привет от Хекслета!"
+
+msgid "Hold Ctrl/Cmd to select multiple labels"
+msgstr "Удерживайте Ctrl/Cmd для выбора нескольких меток"
+
+msgid "Home"
+msgstr "Главная"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Join our community and start managing your tasks efficiently."
+msgstr "Присоединяйтесь к нашему сообществу и начните эффективно управлять своими задачами."
+
+msgid "Label"
+msgstr "Метка"
+
+msgid "Label successfully created"
+msgstr "Метка успешно создана"
+
+msgid "Label successfully deleted"
+msgstr "Метка успешно удалена"
+
+msgid "Label successfully updated"
+msgstr "Метка успешно изменена"
+
+msgid "Labels"
+msgstr "Метки"
+
+msgid "Labels & Statuses"
+msgstr "Метки и статусы"
+
+msgid "Last name"
+msgstr "Фамилия"
+
+msgid "Learn more"
+msgstr "Узнать больше"
+
+msgid "Login"
+msgstr "Вход"
+
+msgid "Login here"
+msgstr "Войти здесь"
+
+msgid "Logout"
+msgstr "Выход"
+
+msgid "Manage users, roles and permissions in your task management system."
+msgstr "Управляйте пользователями, ролями и разрешениями в вашей системе управления задачами."
+
+msgid "Name"
+msgstr "Название"
+
+msgid "No labels found"
+msgstr "Метки не найдены"
+
+msgid "No statuses found"
+msgstr "Статусы не найдены"
+
+msgid "No tasks found"
+msgstr "Задачи не найдены"
+
+msgid "No users found"
+msgstr "Пользователи не найдены"
+
+msgid "Only task author can delete it"
+msgstr "Задачу может удалить только её автор"
+
+msgid "Organize tasks with custom labels and track progress with statuses."
+msgstr "Организуйте задачи с помощью пользовательских меток и отслеживайте прогресс со статусами."
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Password confirmation"
+msgstr "Подтверждение пароля"
+
+msgid "Practical programming courses"
+msgstr "Практические курсы по программированию"
+
+msgid "Ready to get started?"
+msgstr "Готовы начать?"
+
+msgid "Register"
+msgstr "Зарегистрировать"
+
+msgid "Register here"
+msgstr "Зарегистрироваться здесь"
+
+msgid "Select executor"
+msgstr "Выберите исполнителя"
+
+msgid "Sign In"
+msgstr "Войти"
+
+msgid "Sign up"
+msgstr "Регистрация"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Status successfully created"
+msgstr "Статус успешно создан"
+
+msgid "Status successfully deleted"
+msgstr "Статус успешно удалён"
+
+msgid "Status successfully updated"
+msgstr "Статус успешно изменён"
+
+msgid "Statuses"
+msgstr "Статусы"
+
+msgid "Task"
+msgstr "Задача"
+
+msgid "Task Management"
+msgstr "Управление задачами"
+
+msgid "Task Manager"
+msgstr "Менеджер задач"
+
+msgid "Task details"
+msgstr "Детали задачи"
+
+msgid "Task successfully created"
+msgstr "Задача успешно создана"
+
+msgid "Task successfully deleted"
+msgstr "Задача успешно удалена"
+
+msgid "Task successfully updated"
+msgstr "Задача успешно изменена"
+
+msgid "Tasks"
+msgstr "Задачи"
+
+msgid "This action cannot be undone."
+msgstr "Это действие нельзя отменить."
+
+msgid "Update"
+msgstr "Изменить"
+
+msgid "User Management"
+msgstr "Управление пользователями"
+
+msgid "User successfully deleted"
+msgstr "Пользователь успешно удалён"
+
+msgid "User successfully registered"
+msgstr "Пользователь успешно зарегистрирован"
+
+msgid "User successfully updated"
+msgstr "Пользователь успешно изменён"
+
+msgid "Username"
+msgstr "Имя пользователя"
+
+msgid "Users"
+msgstr "Пользователи"
+
+msgid "Warning!"
+msgstr "Внимание!"
+
+msgid "Welcome"
+msgstr "Добро пожаловать"
+
+msgid "Yes, delete"
+msgstr "Да, удалить"
+
+msgid "You are logged in"
+msgstr "Вы залогинены"
+
+msgid "You are logged out"
+msgstr "Вы разлогинены"
+
+msgid "You have no rights to change another user."
+msgstr "У вас нет прав для изменения другого пользователя."
+
+msgid "Your password must contain at least 3 characters."
+msgstr "Ваш пароль должен содержать как минимум 3 символа."
+
+msgid "Create, assign and track tasks with ease. Stay organized and productive."
+msgstr "Создавайте, назначайте и отслеживайте задачи с легкостью. Оставайтесь организованными и продуктивными."
