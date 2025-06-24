@@ -8,42 +8,44 @@ from .models import Task, Status, Label
 
 class TaskFilter(django_filters.FilterSet):
     """Фильтр для задач"""
-    
+
     status = django_filters.ModelChoiceFilter(
         queryset=Status.objects.all(),
+        label=_("Статус"),
         empty_label="---------",
-        widget=forms.Select(attrs={'class': 'form-select'}),
-        label=_("Статус")
+        # ▼▼▼ ДОБАВЛЯЕМ ВИДЖЕТ С НУЖНЫМ КЛАССОМ ▼▼▼
+        widget=forms.Select(attrs={'class': 'form-select'})
     )
-    
-    # ==================== НАЧАЛО ИЗМЕНЕНИЙ ====================
+
     executor = django_filters.ModelChoiceFilter(
         queryset=User.objects.all(),
         label=_("Исполнитель"),
-        # Указываем, как отображать каждого пользователя в списке
-        field_name='executor',
-        label_from_instance=lambda obj: obj.get_full_name()
+        # ▼▼▼ ДОБАВЛЯЕМ ВИДЖЕТ С НУЖНЫМ КЛАССОМ ▼▼▼
+        widget=forms.Select(attrs={'class': 'form-select'})
     )
-    # ===================== КОНЕЦ ИЗМЕНЕНИЙ =====================
 
     labels = django_filters.ModelChoiceFilter(
-        field_name='labels',
         queryset=Label.objects.all(),
+        label=_("Метка"),
         empty_label="---------",
-        widget=forms.Select(attrs={'class': 'form-select'}),
-        label=_("Метка")
+        # ▼▼▼ ДОБАВЛЯЕМ ВИДЖЕТ С НУЖНЫМ КЛАССОМ ▼▼▼
+        widget=forms.Select(attrs={'class': 'form-select'})
     )
 
     self_tasks = django_filters.BooleanFilter(
         method='filter_author_tasks',
         label=_("Только свои задачи"),
-        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
+        widget=forms.CheckboxInput()
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.filters['executor'].field.label_from_instance = lambda obj: obj.get_full_name()
+        self.filters['executor'].field.empty_label = "---------"
 
     class Meta:
         model = Task
-        # Убрал 'label' и 'self_tasks' отсюда, т.к. они определены выше вручную
-        fields = ['status', 'executor'] 
+        fields = ['status', 'executor', 'labels']
 
     def filter_author_tasks(self, queryset, name, value):
         """Фильтр для отображения только задач текущего пользователя"""

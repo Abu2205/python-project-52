@@ -59,7 +59,7 @@ class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def dispatch(self, request, *args, **kwargs):
         """Проверяем, что пользователь может редактировать только себя"""
         if request.user.id != kwargs.get('pk'):
-            messages.error(request, _('У вас нет прав изменять другого пользователя.'))
+            messages.error(request, _('У вас нет прав для изменения другого пользователя.'))
             return redirect('users_index')
         return super().dispatch(request, *args, **kwargs)
 
@@ -93,7 +93,7 @@ class UserDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     def dispatch(self, request, *args, **kwargs):
         """Проверяем, что пользователь может удалять только себя"""
         if request.user.id != kwargs.get('pk'):
-            messages.error(request, _('У вас нет прав изменять другого пользователя.'))
+            messages.error(request, _('У вас нет прав для изменения другого пользователя.'))
             return redirect('users_index')
         return super().dispatch(request, *args, **kwargs)
 

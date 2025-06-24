@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
+from django.contrib.messages import constants as messages
 
 load_dotenv()
 
@@ -32,6 +33,10 @@ INSTALLED_APPS = [
     'django_filters',
     'task_manager_app',
 ]
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
