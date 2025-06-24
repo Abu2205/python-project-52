@@ -1,3 +1,4 @@
+# task_manager_app/forms.py
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -189,16 +190,15 @@ class TaskForm(forms.ModelForm):
     labels = forms.ModelMultipleChoiceField(
         queryset=Label.objects.all(),
         required=False,
-        widget=forms.SelectMultiple(attrs={'class': 'form-control'}),
+        widget=forms.SelectMultiple(attrs={'class': 'form-select'}),
         label=_('Метки')
     )
-
     class Meta:
         model = Task
         fields = ('name', 'description', 'status', 'executor', 'labels')
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Имя')}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': _('Описание')}),
             'status': forms.Select(attrs={'class': 'form-select'}),
             'executor': forms.Select(attrs={'class': 'form-select'}),
         }
@@ -212,7 +212,7 @@ class TaskForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['executor'].empty_label = _('Select executor')
+        self.fields['executor'].empty_label = "---------"
         self.fields['executor'].required = False
 
 

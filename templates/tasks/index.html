@@ -1,83 +1,51 @@
 {% extends "base.html" %}
 {% load i18n %}
-
 {% block content %}
-<!-- Page Header -->
 <h1 class="my-4">{% trans "Задачи" %}</h1>
-
-<!-- Create Task Button -->
 <a class="btn btn-primary mb-3" href="{% url 'task_create' %}" role="button">Создать задачу</a>
 
-<!-- Filter Form -->
-<div class="card mb-3">
-    <div class="card-body bg-light">
-        <form class="form-inline center" method="get">
-            <div class="mb-3">
-                <label class="form-label" for="{{ filter.form.status.id_for_label }}">{{ filter.form.status.label }}</label>
-                <select name="{{ filter.form.status.name }}" 
-                        id="{{ filter.form.status.id_for_label }}"
-                        class="form-select ml-2 mr-3">
-                    <option value="">---------</option>
-                    {% for choice in filter.form.status.field.queryset %}
-                        <option value="{{ choice.pk }}" 
-                               {% if choice.pk|stringformat:"s" == filter.form.status.value|stringformat:"s" %}selected{% endif %}>
-                            {{ choice.name }}
-                        </option>
-                    {% endfor %}
-                </select>
+<div class="row">
+    <div class="col-md-10 col-lg-8">
+        <div class="card mb-3">
+            <div class="card-body bg-light">
+                <form method="get">
+                    <div class="mb-3">
+                        <label for="{{ filter.form.status.id_for_label }}">{{ filter.form.status.label }}</label>
+                        {{ filter.form.status }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ filter.form.executor.id_for_label }}">{{ filter.form.executor.label }}</label>
+                        {{ filter.form.executor }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ filter.form.label.id_for_label }}">{{ filter.form.label.label }}</label>
+                        {{ filter.form.label }}
+                    </div>
+                    <div class="mb-3">
+                         <div class="form-check">
+                            {{ filter.form.self_tasks }}
+                            <label class="form-check-label" for="{{ filter.form.self_tasks.id_for_label }}">
+                                {{ filter.form.self_tasks.label }}
+                            </label>
+                        </div>
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Показать">
+                </form>
             </div>
-            <div class="mb-3">
-                <label class="form-label" for="{{ filter.form.executor.id_for_label }}">{{ filter.form.executor.label }}</label>
-                <select name="{{ filter.form.executor.name }}" 
-                        id="{{ filter.form.executor.id_for_label }}"
-                        class="form-select mr-3 ml-2">
-                    <option value="">---------</option>
-                    {% for choice in filter.form.executor.field.queryset %}
-                        <option value="{{ choice.pk }}" 
-                               {% if choice.pk|stringformat:"s" == filter.form.executor.value|stringformat:"s" %}selected{% endif %}>
-                            {{ choice.get_full_name|default:choice.username }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="{{ filter.form.label.id_for_label }}">{{ filter.form.label.label }}</label>
-                <select name="{{ filter.form.label.name }}" 
-                        id="{{ filter.form.label.id_for_label }}"
-                        class="form-select mr-3 ml-2">
-                    <option value="">---------</option>
-                    {% for choice in filter.form.label.field.queryset %}
-                        <option value="{{ choice.pk }}" 
-                               {% if choice.pk|stringformat:"s" == filter.form.label.value|stringformat:"s" %}selected{% endif %}>
-                            {{ choice.name }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="mb-3">
-                <div class="form-check">
-                    <input type="checkbox" 
-                           name="{{ filter.form.self_tasks.name }}" 
-                           id="{{ filter.form.self_tasks.id_for_label }}"
-                           class="form-check-input mr-3"
-                           {% if filter.form.self_tasks.value %}checked{% endif %}>
-                    <label class="form-check-label" for="{{ filter.form.self_tasks.id_for_label }}">
-                        {{ filter.form.self_tasks.label }}
-                    </label>
-                </div>
-            </div>
-            <input class="btn btn-primary" type="submit" value="Показать">
-        </form>
+        </div>
     </div>
 </div>
 
-<!-- Tasks Table -->
+
 <table class="table table-striped">
     <thead>
         <tr>
             <th>{% trans "ID" %}</th>
             <th>{% trans "Имя" %}</th>
             <th>{% trans "Статус" %}</th>
+            
+            <th></th>
+
             <th>{% trans "Автор" %}</th>
             <th>{% trans "Исполнитель" %}</th>
             <th>{% trans "Дата создания" %}</th>
@@ -92,6 +60,9 @@
                 <a href="{% url 'task_detail' task.pk %}">{{ task.name }}</a>
             </td>
             <td>{{ task.status.name }}</td>
+            
+            <td></td>
+
             <td>{{ task.author.get_full_name|default:task.author.username }}</td>
             <td>
                 {% if task.executor %}
@@ -108,7 +79,7 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="7" class="text-center text-muted">
+            <td colspan="8" class="text-center text-muted">
                 {% trans "No tasks found" %}
             </td>
         </tr>

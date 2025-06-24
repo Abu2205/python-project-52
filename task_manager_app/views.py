@@ -1,3 +1,4 @@
+# task_manager_app/views.py
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
@@ -115,7 +116,13 @@ class UserLoginView(SuccessMessageMixin, LoginView):
     form_class = UserLoginForm
     template_name = 'users/login.html'
     success_message = _('Вы залогинены')
-    
+
+    def form_invalid(self, form):
+        invalid_message = _('Пожалуйста, введите правильные имя пользователя и пароль. '
+            'Оба поля могут быть чувствительны к регистру.'
+        )
+        return self.render_to_response(self.get_context_data(form=form))
+
     def get_success_url(self):
         return reverse_lazy('index')
 

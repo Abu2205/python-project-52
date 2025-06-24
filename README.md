@@ -1,5 +1,5 @@
 ### Hexlet tests and linter status:
-[![Actions Status](https://github.com/Abu2205/python-project-83/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Abu2205/python-project-52/actions)
+[![Actions Status](https://github.com/Abu2205/python-project-52/actions/workflows/hexlet-check.yml)](https://github.com/Abu2205/python-project-52/actions)
 
 ### SonarQube badge
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Abu2205_python-project-52&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Abu2205_python-project-52)

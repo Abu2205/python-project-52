@@ -1,13 +1,14 @@
 {% extends "base.html" %}
-
-{% block title %}Вход - {{ block.super }}{% endblock %}
+{% load django_bootstrap5 %} {% block title %}Вход - {{ block.super }}{% endblock %}
 
 {% block content %}
 <h1 class="my-4">Вход</h1>
 
 <form method="post">
     {% csrf_token %}
-    <div class="mb-3"><label class="form-label" for="id_username">Имя пользователя</label><input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" class="form-control" placeholder="Имя пользователя" required="" id="id_username"></div><div class="mb-3"><label class="form-label" for="id_password">Пароль</label><input type="password" name="password" autocomplete="current-password" class="form-control" placeholder="Пароль" required="" id="id_password"></div>
+    
+    {% bootstrap_form form %}
+
     <input class="btn btn-primary" type="submit" value="Войти">
 </form>
 {% endblock %}

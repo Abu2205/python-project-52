@@ -1,3 +1,4 @@
+# task_manager/settings.py
 import os
 import sys
 from pathlib import Path
@@ -101,9 +102,8 @@ LANGUAGES = [
     ('en', 'English'),
 ]
 
-TIME_ZONE = 'UTC'
-
 USE_I18N = True
+TIME_ZONE = 'UTC'
 USE_L10N = True
 USE_TZ = True
 
