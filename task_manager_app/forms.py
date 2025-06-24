@@ -48,7 +48,9 @@ class UserRegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'password1', 'password2')
+        fields = ('first_name', 'last_name', 'username', 
+                  'password1', 'password2'
+        )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -71,13 +73,17 @@ class UserRegistrationForm(UserCreationForm):
 class UserUpdateForm(forms.ModelForm):
     """Форма обновления пользователя"""
     password1 = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control'}, render_value=False),
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control'}, render_value=False
+        ),
         label=_('Пароль'),
         help_text=_('Ваш пароль должен содержать как минимум 3 символа.'),
         required=True
     )
     password2 = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control'}, render_value=False),
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control'}, render_value=False
+        ),
         label=_('Подтверждение пароля'),
         help_text=_('Введите тот же пароль, что и раньше, для подтверждения.'),
         required=True
@@ -104,42 +110,45 @@ class UserUpdateForm(forms.ModelForm):
             self.fields[field_name].required = True
     
     def clean_username(self):
-        """Валидация имени пользователя"""
         username = self.cleaned_data.get('username')
         if not username:
-            raise ValidationError('Имя пользователя является обязательным полем.')
+            raise ValidationError('Имя пользователя является ' \
+            'обязательным полем.'
+        )
         
 
         if len(username) > 150:
-            raise ValidationError('Имя пользователя не может быть длиннее 150 символов.')
+            raise ValidationError('Имя пользователя не может быть ' \
+            'длиннее 150 символов.'
+        )
         
 
         import re
         if not re.match(r'^[a-zA-Z0-9@./+\-_]+$', username):
-            raise ValidationError('Имя пользователя может содержать только буквы, цифры и символы @/./+/-/_.')
+            raise ValidationError('Имя пользователя может содержать только буквы, ' \
+            'цифры и символы @/./+/-/_.'
+        )
         
         if self.instance.username != username:
             if User.objects.filter(username=username).exists():
-                raise ValidationError('Пользователь с таким именем уже существует.')
-        
+                raise ValidationError('Пользователь с таким именем ' \
+                'уже существует.'
+        )
         return username
     
     def clean_first_name(self):
-        """Валидация имени"""
         first_name = self.cleaned_data.get('first_name')
         if not first_name or not first_name.strip():
             raise ValidationError('Имя является обязательным полем.')
         return first_name.strip()
     
     def clean_last_name(self):
-        """Валидация фамилии"""
         last_name = self.cleaned_data.get('last_name')
         if not last_name or not last_name.strip():
             raise ValidationError('Фамилия является обязательным полем.')
         return last_name.strip()
     
     def clean_password1(self):
-        """Валидация пароля"""
         password1 = self.cleaned_data.get('password1')
         if not password1:
             raise ValidationError('Пароль является обязательным полем.')
@@ -150,12 +159,13 @@ class UserUpdateForm(forms.ModelForm):
         return password1
     
     def clean_password2(self):
-        """Валидация подтверждения пароля"""
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         
         if not password2:
-            raise ValidationError('Подтверждение пароля является обязательным полем.')
+            raise ValidationError('Подтверждение пароля является ' \
+            'обязательным полем.'
+        )
         
         if password1 and password2 and password1 != password2:
             raise ValidationError("Пароли не совпадают.")
@@ -172,7 +182,6 @@ class UserUpdateForm(forms.ModelForm):
         return user
 
 class StatusForm(forms.ModelForm):
-    """Форма для статуса"""
     
     class Meta:
         model = Status
@@ -186,7 +195,6 @@ class StatusForm(forms.ModelForm):
 
 
 class TaskForm(forms.ModelForm):
-    """Форма для задачи"""
     executor = UserChoiceField(
         queryset=User.objects.all(),
         required=False,
@@ -205,8 +213,12 @@ class TaskForm(forms.ModelForm):
         model = Task
         fields = ('name', 'description', 'status', 'executor', 'labels')
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Имя')}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': _('Описание')}),
+            'name': forms.TextInput(attrs={
+                'class': 'form-control', 'placeholder': _('Имя')
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control', 'rows': 4, 'placeholder': _('Описание')
+            }),
             'status': forms.Select(attrs={'class': 'form-select'}),
 
         }
@@ -223,7 +235,6 @@ class TaskForm(forms.ModelForm):
 
 
 class LabelForm(forms.ModelForm):
-    """Форма для меток"""
     
     class Meta:
         model = Label

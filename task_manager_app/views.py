@@ -1,5 +1,8 @@
 # task_manager_app/views.py
-from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import (
+    TemplateView, ListView, CreateView, 
+    UpdateView, DeleteView, DetailView
+)
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -11,12 +14,14 @@ from django.utils.translation import gettext_lazy as _
 from django.db.models import ProtectedError
 from django_filters.views import FilterView
 from .filters import TaskFilter
-from .forms import UserRegistrationForm, UserUpdateForm, StatusForm, TaskForm, LabelForm, UserLoginForm
+from .forms import (
+    UserRegistrationForm, UserUpdateForm, 
+    StatusForm, TaskForm, LabelForm, UserLoginForm
+)
 from .models import Status, Task, Label
 
 
 class IndexView(TemplateView):
-    """Главная страница с приветствием"""
     template_name = 'index.html'
 
     def get_context_data(self, **kwargs):
@@ -33,14 +38,12 @@ class IndexView(TemplateView):
 # ========== USER VIEWS ==========
 
 class UserListView(ListView):
-    """Список всех пользователей"""
     model = User
     template_name = 'users/index.html'
     context_object_name = 'users'
 
 
 class UserCreateView(SuccessMessageMixin, CreateView):
-    """Регистрация нового пользователя"""
     model = User
     form_class = UserRegistrationForm
     template_name = 'users/create.html'
@@ -49,7 +52,6 @@ class UserCreateView(SuccessMessageMixin, CreateView):
 
 
 class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-    """Редактирование пользователя"""
     model = User
     form_class = UserUpdateForm
     template_name = 'users/update.html'
@@ -57,14 +59,14 @@ class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = _('Пользователь успешно изменен')
 
     def dispatch(self, request, *args, **kwargs):
-        """Проверяем, что пользователь может редактировать только себя"""
         if request.user.id != kwargs.get('pk'):
-            messages.error(request, _('У вас нет прав для изменения другого пользователя.'))
+            messages.error(request, _('У вас нет прав для изменения другого ' \
+            'пользователя.'
+            ))
             return redirect('users_index')
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        """Обрабатываем форму и перелогиниваем пользователя если пароль изменился"""
         user = form.save()
         password = form.cleaned_data.get('password1')
         if password:
@@ -73,18 +75,14 @@ class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        """Обрабатываем ошибки валидации - остаемся на той же странице"""
         return super().form_invalid(form)
 
     def get_context_data(self, **kwargs):
-        """Добавляем дополнительный контекст"""
         context = super().get_context_data(**kwargs)
         return context
 
 
-
 class UserDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    """Удаление пользователя"""
     model = User
     template_name = 'users/delete.html'
     success_url = reverse_lazy('users_index')
@@ -93,7 +91,9 @@ class UserDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     def dispatch(self, request, *args, **kwargs):
         """Проверяем, что пользователь может удалять только себя"""
         if request.user.id != kwargs.get('pk'):
-            messages.error(request, _('У вас нет прав для изменения другого пользователя.'))
+            messages.error(request, _('У вас нет прав для изменения другого ' \
+            'пользователя.'
+            ))
             return redirect('users_index')
         return super().dispatch(request, *args, **kwargs)
 
@@ -102,13 +102,17 @@ class UserDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         user = self.get_object()
         try:
             if user.authored_tasks.exists() or user.assigned_tasks.exists():
-                messages.error(request, _('Невозможно удалить пользователя, который используется'))
+                messages.error(request, _('Невозможно удалить пользователя, ' \
+                'который используется'
+                ))
                 return redirect('users_index')
             
             messages.success(request, self.success_message)
             return super().post(request, *args, **kwargs)
         except ProtectedError:
-            messages.error(request, _('Невозможно удалить пользователя, который используется'))
+            messages.error(request, _('Невозможно удалить пользователя, ' \
+            'который используется'
+            ))
             return redirect('users_index')
 
 
@@ -116,12 +120,6 @@ class UserLoginView(SuccessMessageMixin, LoginView):
     form_class = UserLoginForm
     template_name = 'users/login.html'
     success_message = _('Вы залогинены')
-
-    def form_invalid(self, form):
-        invalid_message = _('Пожалуйста, введите правильные имя пользователя и пароль. '
-            'Оба поля могут быть чувствительны к регистру.'
-        )
-        return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
         return reverse_lazy('index')
@@ -176,13 +174,17 @@ class StatusDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         status = self.get_object()
         try:
             if status.task_set.exists():
-                messages.error(request, _('Невозможно удалить статус, который используется'))
+                messages.error(request, _('Невозможно удалить статус, ' \
+                'который используется'
+                ))
                 return redirect('statuses_index')
             
             messages.success(request, self.success_message)
             return super().post(request, *args, **kwargs)
         except ProtectedError:
-            messages.error(request, _('Невозможно удалить статус, который используется'))
+            messages.error(request, _('Невозможно удалить статус, ' \
+            'который используется'
+            ))
             return redirect('statuses_index')
 
 
@@ -292,11 +294,15 @@ class LabelDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         label = self.get_object()
         try:
             if label.tasks.exists():
-                messages.error(request, _('Невозможно удалить метку, связанную с задачами'))
+                messages.error(request, _('Невозможно удалить метку, ' \
+                'связанную с задачами'
+                ))
                 return redirect('labels_index')
 
             messages.success(request, self.success_message)
             return super().post(request, *args, **kwargs)
         except ProtectedError:
-            messages.error(request, _('Невозможно удалить метку, связанную с задачами'))
+            messages.error(request, _('Невозможно удалить метку, ' \
+            'связанную с задачами'
+            ))
             return redirect('labels_index')

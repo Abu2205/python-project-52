@@ -228,7 +228,9 @@ class TaskFilterTest(BaseTestCase):
         """Тест фильтрации по статусу"""
         self.client.force_login(self.user1)
         
-        response = self.client.get(reverse('tasks_index'), {'status': self.status1.pk})
+        response = self.client.get(reverse('tasks_index'), {
+            'status': self.status1.pk
+        })
         self.assertEqual(response.status_code, 200)
         
         self.assertContains(response, 'Task 1')
@@ -239,7 +241,9 @@ class TaskFilterTest(BaseTestCase):
         """Тест фильтрации по исполнителю"""
         self.client.force_login(self.user1)
         
-        response = self.client.get(reverse('tasks_index'), {'executor': self.user1.pk})
+        response = self.client.get(reverse('tasks_index'), {
+            'executor': self.user1.pk
+        })
         self.assertEqual(response.status_code, 200)
         
         self.assertContains(response, 'Task 2')
@@ -250,7 +254,9 @@ class TaskFilterTest(BaseTestCase):
         """Тест фильтрации по метке"""
         self.client.force_login(self.user1)
         
-        response = self.client.get(reverse('tasks_index'), {'label': self.label1.pk})
+        response = self.client.get(reverse('tasks_index'), {
+            'label': self.label1.pk
+    })
         self.assertEqual(response.status_code, 200)
         
         self.assertContains(response, 'Task 1')
@@ -261,7 +267,9 @@ class TaskFilterTest(BaseTestCase):
         """Тест фильтрации собственных задач"""
         self.client.force_login(self.user1)
         
-        response = self.client.get(reverse('tasks_index'), {'self_tasks': 'on'})
+        response = self.client.get(reverse('tasks_index'), {
+            'self_tasks': 'on'
+        })
         self.assertEqual(response.status_code, 200)
         
         self.assertContains(response, 'Task 1')
