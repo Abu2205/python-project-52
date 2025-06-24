@@ -4,8 +4,8 @@
 ### SonarQube badge
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Abu2205_python-project-52&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Abu2205_python-project-52)
 
-# Hexlet Code - Task Manager
 
+# Hexlet Code - Task Manager
 Django приложение для управления задачами, разработанное в рамках курса Hexlet.
 
 ## Описание
@@ -14,7 +14,7 @@ Task Manager - это веб-приложение на Django для управ�
 
 ## Демо
 
-🚀 **[Посмотреть живое приложение](https://your-app-name.onrender.com)**
+🚀 **https://python-project-52-v8fi.onrender.com
 
 ## Требования
 
