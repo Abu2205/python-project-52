@@ -4,6 +4,7 @@
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Abu2205_python-project-52&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Abu2205_python-project-52)
 
+
 "Менеджер задач" — это веб-приложение для управления задачами, созданное на Django. Оно позволяет пользователям регистрироваться, управлять задачами, назначать им статусы, исполнителей и метки.
 
 ## Ссылка на задеплоенное приложение
