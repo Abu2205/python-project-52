@@ -10,7 +10,10 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'your-local-secret-key-here')
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+if not SECRET_KEY:
+    raise ImproperlyConfigured("Необходимо установить переменную окружения SECRET_KEY")
 
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
