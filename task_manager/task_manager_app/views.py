@@ -24,14 +24,6 @@ from .models import Status, Task, Label
 class IndexView(TemplateView):
     template_name = 'index.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        if self.request.GET.get('test_rollbar'):
-            a = None
-            a.hello()
-        return context
-
 
 class UserListView(ListView):
     model = User
